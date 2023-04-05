@@ -149,7 +149,7 @@ RLUTIL_INLINE int kbhit(void) {
 #ifndef gotoxy
 /// Function: gotoxy
 /// Same as <rlutil.locate>.
-RLUTIL_INLINE void gotoxy(int x, int y) {
+RLUTIL_INLINE [[maybe_unused]]  void gotoxy(int x, int y) {
 #ifdef __cplusplus
     rlutil::
 #endif
@@ -336,7 +336,7 @@ namespace rlutil {
     enum {
         KEY_ESCAPE = 0,
         KEY_ENTER = 1,
-        KEY_SPACE = 32,
+        KEY_SPACE [[maybe_unused]] = 32,
 
         KEY_INSERT = 2,
         KEY_HOME = 3,
@@ -351,17 +351,17 @@ namespace rlutil {
         KEY_RIGHT = 17,
 
         KEY_F1 = 18,
-        KEY_F2 = 19,
-        KEY_F3 = 20,
-        KEY_F4 = 21,
-        KEY_F5 = 22,
-        KEY_F6 = 23,
-        KEY_F7 = 24,
-        KEY_F8 = 25,
-        KEY_F9 = 26,
-        KEY_F10 = 27,
-        KEY_F11 = 28,
-        KEY_F12 = 29,
+        KEY_F2 [[maybe_unused]] = 19,
+        KEY_F3 [[maybe_unused]] = 20,
+        KEY_F4 [[maybe_unused]] = 21,
+        KEY_F5 [[maybe_unused]] = 22,
+        KEY_F6 [[maybe_unused]] = 23,
+        KEY_F7 [[maybe_unused]] = 24,
+        KEY_F8 [[maybe_unused]] = 25,
+        KEY_F9 [[maybe_unused]] = 26,
+        KEY_F10 [[maybe_unused]] = 27,
+        KEY_F11 [[maybe_unused]] = 28,
+        KEY_F12 [[maybe_unused]] = 29,
 
         KEY_NUMDEL = 30,
         KEY_NUMPAD0 = 31,
@@ -369,7 +369,7 @@ namespace rlutil {
         KEY_NUMPAD2 = 128,
         KEY_NUMPAD3 = 129,
         KEY_NUMPAD4 = 130,
-        KEY_NUMPAD5 = 131,
+        KEY_NUMPAD5 [[maybe_unused]] = 131,
         KEY_NUMPAD6 = 132,
         KEY_NUMPAD7 = 133,
         KEY_NUMPAD8 = 134,
@@ -472,7 +472,7 @@ namespace rlutil {
 
 /// Function: nb_getch
 /// Non-blocking getch(). Returns 0 if no key was pressed.
-    RLUTIL_INLINE int nb_getch(void) {
+    RLUTIL_INLINE [[maybe_unused]]  int nb_getch(void) {
         if (kbhit()) return getch();
         else return 0;
     }
@@ -552,7 +552,7 @@ namespace rlutil {
 /// Don't change the background color
 ///
 /// See <Color Codes>
-    RLUTIL_INLINE void setColor(int c) {
+    RLUTIL_INLINE [[maybe_unused]]  void setColor(int c) {
 #if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -571,7 +571,7 @@ namespace rlutil {
 /// Don't change the foreground color
 ///
 /// See <Color Codes>
-    RLUTIL_INLINE void setBackgroundColor(int c) {
+    RLUTIL_INLINE [[maybe_unused]]  void setBackgroundColor(int c) {
 #if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
         HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
         CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -615,7 +615,7 @@ namespace rlutil {
 /// See <Color Codes>
 /// See <setColor>
 /// See <saveDefaultColor>
-    RLUTIL_INLINE void resetColor(void) {
+    RLUTIL_INLINE [[maybe_unused]]  void resetColor(void) {
 #if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (WORD) saveDefaultColor());
 #else
@@ -702,7 +702,7 @@ namespace rlutil {
 
 /// Function: setChar
 /// Sets the character at the cursor without advancing the cursor
-    RLUTIL_INLINE void setChar(char ch) {
+    RLUTIL_INLINE [[maybe_unused]]  void setChar(char ch) {
         const char buf[] = {ch, 0};
         setString(buf);
     }
@@ -735,7 +735,7 @@ namespace rlutil {
 
 /// Function: msleep
 /// Waits given number of milliseconds before continuing.
-    RLUTIL_INLINE void msleep(unsigned int ms) {
+    RLUTIL_INLINE [[maybe_unused]]  void msleep(unsigned int ms) {
 #ifdef _WIN32
         Sleep(ms);
 #else
@@ -754,7 +754,7 @@ namespace rlutil {
 
 /// Function: trows
 /// Get the number of rows in the terminal window or -1 on error.
-    RLUTIL_INLINE int trows(void) {
+    RLUTIL_INLINE [[maybe_unused]]  int trows(void) {
 #ifdef _WIN32
         CONSOLE_SCREEN_BUFFER_INFO csbi;
         if (!GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))
@@ -779,7 +779,7 @@ namespace rlutil {
 
 /// Function: tcols
 /// Get the number of columns in the terminal window or -1 on error.
-    RLUTIL_INLINE int tcols(void) {
+    RLUTIL_INLINE [[maybe_unused]]  int tcols(void) {
 #ifdef _WIN32
         CONSOLE_SCREEN_BUFFER_INFO csbi;
         if (!GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))
@@ -829,25 +829,25 @@ namespace rlutil {
 
 #ifdef __cplusplus
 
-    RLUTIL_INLINE void setConsoleTitle(const RLUTIL_STRING_T &title) {
+    RLUTIL_INLINE [[maybe_unused]]  void setConsoleTitle(const RLUTIL_STRING_T &title) {
         const char *true_title = title.c_str();
 #else // __cplusplus
         RLUTIL_INLINE void setConsoleTitle(RLUTIL_STRING_T title) {
             const char *true_title = title;
 #endif // __cplusplus
-#if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
+#if defined(_WIN32) && !defined(RLUTIL_
 
-
-   SetConsoleTitleA(true_title);
+SE_ANSI)
+            SetConsoleTitleA(true_title);
 #else
             RLUTIL_PRINT(ANSI_CONSOLE_TITLE_PRE);
-            RLUTIL_PRINT(true_title);
-            RLUTIL_P
-    INT(ANSI_CONSOLE_TIT
-        _POST);
-#endif // defined(_WIN3
+            RLUTIL_PRINT(tru title);
 
-         && !defined(RLUTIL_USE_ANSI)
+           RLUTIL_PRINT(ANSI_CONSOLE_TITL
+        POST);
+#endif // defined(_WIN32
 
-         }// namespace rlutil
+        && !defined(RLUTIL_USE_ANSI)
+
+        }// namespace rlutil
 #endif

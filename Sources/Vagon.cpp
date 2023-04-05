@@ -6,17 +6,14 @@
 #include "../Headers/Vagon.h"
 
 // Constructor vagon
-Vagon::Vagon() : capacitateMaxima{15}, incarcaturaCurenta{0}, denumireMarfa{"-"} {
+Vagon::Vagon() : capacitateMaxima{15}, denumireMarfa{"-"} {
     string log = "Vagon nou\n";
     cout << log;
 }
 
 // Constructor de copiere vagon
-Vagon::Vagon(const Vagon &vagonVechi) {
-    capacitateMaxima = vagonVechi.capacitateMaxima;
-    denumireMarfa = vagonVechi.denumireMarfa;
-    incarcaturaCurenta = 0;
-
+Vagon::Vagon(const Vagon &vagonVechi) : capacitateMaxima{vagonVechi.capacitateMaxima},
+                                        denumireMarfa(vagonVechi.denumireMarfa) {
     cout << "Vagon nou" << endl;
 }
 
@@ -24,7 +21,6 @@ Vagon::Vagon(const Vagon &vagonVechi) {
 Vagon &Vagon::operator=(const Vagon &vagonVechi) {
     capacitateMaxima = vagonVechi.capacitateMaxima;
     denumireMarfa = vagonVechi.denumireMarfa;
-    incarcaturaCurenta = 0;
 
     return *this;
 }

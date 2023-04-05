@@ -6,7 +6,7 @@
 #include "iostream"
 
 // Constructor firma
-[[maybe_unused]] Firma::Firma(string denumire_) : denumire{std::move(denumire_)}, money{15000} {
+Firma::Firma(string denumire_) : denumire{std::move(denumire_)}, money{15000} {
     string log = "A fost creata firma " + denumire + '\n';
     cout << log;
 }

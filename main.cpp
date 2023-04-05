@@ -7,6 +7,8 @@
 #include "Headers/Firma.h"
 #include "Headers/Tren.h"
 
+using namespace std;
+
 void afisareLogo() {
     cout << R"( _______        _         __  __             _       )" << endl;
     cout << R"(|__   __|      (_)       |  \/  |           (_)      )" << endl;
@@ -141,8 +143,8 @@ int main() {
         IKEA.regenerareCoordonate();
     }
 
-    hartaJoc.actualizareHarta(Lumbermill);
-    hartaJoc.actualizareHarta(IKEA);
+    hartaJoc.actualizareHarta(&Lumbermill);
+    hartaJoc.actualizareHarta(&IKEA);
 
     updateInterfata(&myCompany, &hartaJoc);
     asteptareInput(&myCompany, &hartaJoc);

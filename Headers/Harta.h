@@ -33,7 +33,7 @@ public:
 
     // Actualizez simbolul unei entitati pe harta si adaug entitatea in vectorul ei specific
     // Suprascriere functie
-    void actualizareHarta(Fabrica myFabrica);
+    void actualizareHarta(Fabrica *myFabrica);
 
     void actualizareHarta(CaleFerata *myCaleFerata);
 

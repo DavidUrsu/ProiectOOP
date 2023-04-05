@@ -9,6 +9,7 @@ Harta::Harta() {
     for (int i = 0; i < 20; i++) {
         vector<char> linie;
         // Adaug caracterul standard al hartii
+        linie.reserve(100);
         for (int j = 0; j < 100; j++) {
             linie.push_back(caracterBackgrond);
         }
@@ -28,9 +29,9 @@ void Harta::afisareHarta() {
 
 // Actualizez simbolul unei entitati pe harta si adaug entitatea in vectorul ei specific
 // Suprascriere functie
-void Harta::actualizareHarta(Fabrica myFabrica) {
-    vectorHarta[myFabrica.getY()][myFabrica.getX()] = myFabrica.getSimbol();
-    listaFabrici.push_back(&myFabrica);
+void Harta::actualizareHarta(Fabrica *myFabrica) {
+    vectorHarta[myFabrica->getY()][myFabrica->getX()] = myFabrica->getSimbol();
+    listaFabrici.push_back(myFabrica);
 }
 
 void Harta::actualizareHarta(CaleFerata *myCaleFerata) {

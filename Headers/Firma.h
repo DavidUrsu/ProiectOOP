@@ -21,7 +21,7 @@ class Firma {
 
 public:
     // Constructor firma
-    [[maybe_unused]] explicit Firma(string denumire_ = "Unnamed Company");
+    explicit Firma(string denumire_ = "Unnamed Company");
 
     // Adaug referinta trenului in vectorul de flota
     void adaugareLocomotiva(Tren *myTrain);
