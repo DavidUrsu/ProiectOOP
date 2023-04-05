@@ -19,7 +19,7 @@ Tren::~Tren() {
 }
 
 // Functie prin care se adauga vagoane la tren
-[[maybe_unused]] void Tren::cuplareVagone(int numarVagoane, Firma *myCompany, int indexTren) {
+void Tren::cuplareVagone(int numarVagoane, Firma *myCompany, int indexTren) {
 
     // verific bugetul companiei
     if (numarVagoane * 100 > myCompany->getMoney()) {
@@ -42,7 +42,7 @@ Tren::~Tren() {
 }
 
 // Functie prin care se elimina vagoanele unui tren
-[[maybe_unused]] void Tren::decuplareVagone(int numarVagoane, Firma *myCompany, int indexTren) {
+void Tren::decuplareVagone(int numarVagoane, Firma *myCompany, int indexTren) {
     // Verific cazul daca sterg mai multe vagoane decat sunt atasate trenului
     if (numarVagoane > int(incarcatura.size())) {
         string log = "S-au vandut toate vagoanele trenului " + model + '(' + to_string(indexTren + 1) + ')' + '\n';

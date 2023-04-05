@@ -6,6 +6,8 @@
 #include "Headers/Harta.h"
 #include "Headers/Firma.h"
 #include "Headers/Tren.h"
+#include "Headers/Fabrica.h"
+#include "Headers/CaleFerata.h"
 
 using namespace std;
 

@@ -18,7 +18,7 @@ Harta::Harta() {
 }
 
 // Functie prin care afisez harta
-[[maybe_unused]] void Harta::afisareHarta() {
+void Harta::afisareHarta() {
     for (int i = 19; i >= 0; i--) {
         for (int j = 0; j < 100; j++) {
             cout << vectorHarta[i][j];
@@ -39,7 +39,7 @@ void Harta::actualizareHarta(CaleFerata *myCaleFerata) {
 }
 
 // Functie prin care se afiseaza lista tuturor fabricilor de pe harta
-[[maybe_unused]] void Harta::afisareListaFabrici() {
+void Harta::afisareListaFabrici() {
 
     for (auto &i: listaFabrici) {
         cout << i->getDenumire() << " || Cere: " << i->getMaterialCerut() << " || Ofera: " << i->getMaterialOferit()
@@ -47,7 +47,7 @@ void Harta::actualizareHarta(CaleFerata *myCaleFerata) {
     }
 }
 
-[[maybe_unused]] void Harta::construireCaleFerata(const string &fabrica1, const string &fabrica2) {
+void Harta::construireCaleFerata(const string &fabrica1, const string &fabrica2) {
     // Gasesc coordonatele fabricilor intre care vreau sa construiesc calea ferata
     int x1 = -1, x2 = -1, y1 = -1, y2 = -1;
     for (unsigned int i = 0; i < size(listaFabrici); i++) {

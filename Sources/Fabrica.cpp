@@ -71,7 +71,7 @@ string Fabrica::getMaterialCerut() {
 }
 
 // Regenerare coordonate ale fabricii
-[[maybe_unused]] void Fabrica::regenerareCoordonate() {
+void Fabrica::regenerareCoordonate() {
     coordonateX = my_rand(100);
     coordonateY = my_rand(20);
 }
