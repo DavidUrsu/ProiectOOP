@@ -40,21 +40,51 @@
 
 #ifdef __cplusplus
 	/// Common C++ headers
+	#include <ctime>  // for nanosleep
 	#include <iostream>
 	#include <string>
 	#include <cstdio> // for getch()
+	#include <cstdlib> // for std::getenv
 	/// Namespace forward declarations
 	namespace rlutil {
 		RLUTIL_INLINE void locate(int x, int y);
 	}
 #else
+	#define _POSIX_C_SOURCE 199309L
+	#include <time.h>  // for nanosleep
 	#include <stdio.h> // for getch() / printf()
+	#include <stdlib.h> // for getenv()
 	#include <string.h> // for strlen()
 	RLUTIL_INLINE void locate(int x, int y); // Forward declare for C to avoid warnings
 #endif // __cplusplus
 
+int runs_on_ci() {
+	return
+	#ifdef __cplusplus
+	std::getenv("GITHUB_ACTIONS") != nullptr;
+	#else
+	getenv("GITHUB_ACTIONS") != NULL;
+	#endif	
+}
+
 #ifdef _WIN32
+	#ifndef WIN32_LEAN_AND_MEAN
+		#define WIN32_LEAN_AND_MEAN 1
+		#define LOCAL_WIN32_LEAN_AND_MEAN 1
+	#endif
+	#ifndef NOMINMAX 
+		#define NOMINMAX  1
+		#define LOCAL_NOMINMAX 1
+	#endif
 	#include <windows.h>  // for WinAPI and Sleep()
+	// cleanup
+	#ifdef LOCAL_WIN32_LEAN_AND_MEAN
+		#undef WIN32_LEAN_AND_MEAN
+	#endif
+	#ifdef LOCAL_NOMINMAX
+		#undef NOMINMAX
+	#endif
+
 	#define _NO_OLDNAMES  // for MinGW compatibility
 	#include <conio.h>    // for getch() and kbhit()
 	#define getch _getch
@@ -70,6 +100,9 @@
 /// Get character without waiting for Return to be pressed.
 /// Windows has this in conio.h
 RLUTIL_INLINE int getch(void) {
+	if(runs_on_ci())
+		return getchar();
+
 	// Here be magic.
 	struct termios oldt, newt;
 	int ch;
@@ -86,6 +119,9 @@ RLUTIL_INLINE int getch(void) {
 /// Determines if keyboard has been hit.
 /// Windows has this in conio.h
 RLUTIL_INLINE int kbhit(void) {
+	if(runs_on_ci())
+		return 1;
+
 	// Here be dragons.
 	static struct termios oldt, newt;
 	int cnt = 0;
@@ -110,7 +146,7 @@ RLUTIL_INLINE int kbhit(void) {
 #ifndef gotoxy
 /// Function: gotoxy
 /// Same as <rlutil.locate>.
-RLUTIL_INLINE void gotoxy(int x, int y) {
+RLUTIL_INLINE [[maybe_unused]]  void gotoxy(int x, int y) {
 	#ifdef __cplusplus
 	rlutil::
 	#endif
@@ -296,7 +332,7 @@ const RLUTIL_STRING_T ANSI_BACKGROUND_WHITE   = "\033[47m";
 enum {
 	KEY_ESCAPE  = 0,
 	KEY_ENTER   = 1,
-	KEY_SPACE   = 32,
+	KEY_SPACE [[maybe_unused]] = 32,
 
 	KEY_INSERT  = 2,
 	KEY_HOME    = 3,
@@ -311,17 +347,17 @@ enum {
 	KEY_RIGHT   = 17,
 
 	KEY_F1      = 18,
-	KEY_F2      = 19,
-	KEY_F3      = 20,
-	KEY_F4      = 21,
-	KEY_F5      = 22,
-	KEY_F6      = 23,
-	KEY_F7      = 24,
-	KEY_F8      = 25,
-	KEY_F9      = 26,
-	KEY_F10     = 27,
-	KEY_F11     = 28,
-	KEY_F12     = 29,
+	KEY_F2 [[maybe_unused]] = 19,
+	KEY_F3 [[maybe_unused]] = 20,
+	KEY_F4 [[maybe_unused]] = 21,
+	KEY_F5 [[maybe_unused]] = 22,
+	KEY_F6 [[maybe_unused]] = 23,
+	KEY_F7 [[maybe_unused]] = 24,
+	KEY_F8 [[maybe_unused]] = 25,
+	KEY_F9 [[maybe_unused]] = 26,
+	KEY_F10 [[maybe_unused]] = 27,
+	KEY_F11 [[maybe_unused]] = 28,
+	KEY_F12 [[maybe_unused]] = 29,
 
 	KEY_NUMDEL  = 30,
 	KEY_NUMPAD0 = 31,
@@ -329,7 +365,7 @@ enum {
 	KEY_NUMPAD2 = 128,
 	KEY_NUMPAD3 = 129,
 	KEY_NUMPAD4 = 130,
-	KEY_NUMPAD5 = 131,
+	KEY_NUMPAD5 [[maybe_unused]] = 131,
 	KEY_NUMPAD6 = 132,
 	KEY_NUMPAD7 = 133,
 	KEY_NUMPAD8 = 134,
@@ -344,6 +380,9 @@ enum {
 /// Note:
 /// Only Arrows, Esc, Enter and Space are currently working properly.
 RLUTIL_INLINE int getkey(void) {
+	if(runs_on_ci())
+   	    return getchar();
+
 	#ifndef _WIN32
 	int cnt = kbhit(); // for ANSI escapes processing
 	#endif
@@ -402,14 +441,14 @@ RLUTIL_INLINE int getkey(void) {
 
 /// Function: nb_getch
 /// Non-blocking getch(). Returns 0 if no key was pressed.
-RLUTIL_INLINE int nb_getch(void) {
+RLUTIL_INLINE [[maybe_unused]]  int nb_getch(void) {
 	if (kbhit()) return getch();
 	else return 0;
 }
 
 /// Function: getANSIColor
 /// Return ANSI color escape sequence for specified number 0-15.
-/// k
+///
 /// See <Color Codes>
 RLUTIL_INLINE RLUTIL_STRING_T getANSIColor(const int c) {
 	switch (c) {
@@ -456,7 +495,7 @@ RLUTIL_INLINE RLUTIL_STRING_T getANSIBackgroundColor(const int c) {
 /// Don't change the background color
 ///
 /// See <Color Codes>
-RLUTIL_INLINE void setColor(int c) {
+RLUTIL_INLINE [[maybe_unused]]  void setColor(int c) {
 #if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -474,7 +513,7 @@ RLUTIL_INLINE void setColor(int c) {
 /// Don't change the foreground color
 ///
 /// See <Color Codes>
-RLUTIL_INLINE void setBackgroundColor(int c) {
+RLUTIL_INLINE [[maybe_unused]]  void setBackgroundColor(int c) {
 #if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
@@ -517,7 +556,7 @@ RLUTIL_INLINE int saveDefaultColor(void) {
 /// See <Color Codes>
 /// See <setColor>
 /// See <saveDefaultColor>
-RLUTIL_INLINE void resetColor(void) {
+RLUTIL_INLINE [[maybe_unused]]  void resetColor(void) {
 #if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), (WORD)saveDefaultColor());
 #else
@@ -528,6 +567,9 @@ RLUTIL_INLINE void resetColor(void) {
 /// Function: cls
 /// Clears screen, resets all attributes and moves cursor home.
 RLUTIL_INLINE void cls(void) {
+	if(runs_on_ci())
+		return;
+
 #if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
 	// Based on https://msdn.microsoft.com/en-us/library/windows/desktop/ms682022%28v=vs.85%29.aspx
 	const HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -600,7 +642,7 @@ RLUTIL_INLINE void setString(RLUTIL_STRING_T str) {
 
 /// Function: setChar
 /// Sets the character at the cursor without advancing the cursor
-RLUTIL_INLINE void setChar(char ch) {
+RLUTIL_INLINE [[maybe_unused]]  void setChar(char ch) {
 	const char buf[] = {ch, 0};
 	setString(buf);
 }
@@ -633,19 +675,26 @@ RLUTIL_INLINE void showcursor(void) {
 
 /// Function: msleep
 /// Waits given number of milliseconds before continuing.
-RLUTIL_INLINE void msleep(unsigned int ms) {
+RLUTIL_INLINE [[maybe_unused]]  void msleep(unsigned int ms) {
 #ifdef _WIN32
 	Sleep(ms);
 #else
+	// https://stackoverflow.com/a/55860234
+	struct timespec ts;
+	ts.tv_sec = ms / 1000000ul;            // whole seconds
+	ts.tv_nsec = (ms % 1000000ul) * 1000;  // remainder, in nanoseconds
+	nanosleep(&ts, NULL);
+
+	// usleep gives warnings in C code; seems to be deprecated/legacy
 	// usleep argument must be under 1 000 000
-	if (ms > 1000) sleep(ms/1000000);
-	usleep((ms % 1000000) * 1000);
+	// if (ms > 1000) sleep(ms/1000000);
+	// usleep((ms % 1000000) * 1000);
 #endif
 }
 
 /// Function: trows
 /// Get the number of rows in the terminal window or -1 on error.
-RLUTIL_INLINE int trows(void) {
+RLUTIL_INLINE [[maybe_unused]]  int trows(void) {
 #ifdef _WIN32
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if (!GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))
@@ -670,7 +719,7 @@ RLUTIL_INLINE int trows(void) {
 
 /// Function: tcols
 /// Get the number of columns in the terminal window or -1 on error.
-RLUTIL_INLINE int tcols(void) {
+RLUTIL_INLINE [[maybe_unused]]  int tcols(void) {
 #ifdef _WIN32
 	CONSOLE_SCREEN_BUFFER_INFO csbi;
 	if (!GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi))
@@ -716,18 +765,18 @@ RLUTIL_INLINE void anykey(RLUTIL_STRING_T msg) {
 	getch();
 }
 
-RLUTIL_INLINE void setConsoleTitle(RLUTIL_STRING_T title) {
-	const char * true_title =
 #ifdef __cplusplus
-		title.c_str();
+RLUTIL_INLINE [[maybe_unused]]  void setConsoleTitle(const RLUTIL_STRING_T & title) {
+	const char * true_title = title.c_str();
 #else // __cplusplus
-		title;
+RLUTIL_INLINE void setConsoleTitle(RLUTIL_STRING_T title) {
+	const char * true_title = title;
 #endif // __cplusplus
 #if defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
 	SetConsoleTitleA(true_title);
 #else
 	RLUTIL_PRINT(ANSI_CONSOLE_TITLE_PRE);
-	RLUTIL_PRINT(true_title);
+	RLUTIL_PRINT(tru title);
 	RLUTIL_PRINT(ANSI_CONSOLE_TITLE_POST);
 #endif // defined(_WIN32) && !defined(RLUTIL_USE_ANSI)
 }
@@ -739,10 +788,10 @@ RLUTIL_INLINE void setConsoleTitle(RLUTIL_STRING_T title) {
 /// RAII OOP wrapper for <rlutil.hidecursor>.
 /// Hides the cursor and shows it again
 /// when the object goes out of scope.
-struct CursorHider {
+struct  [[maybe_unused]] CursorHider {
 	CursorHider() { hidecursor(); }
 	~CursorHider() { showcursor(); }
 };
 
-} // namespace rlutil
+}// namespace rlutil
 #endif
