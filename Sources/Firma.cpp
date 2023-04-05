@@ -6,18 +6,18 @@
 #include "iostream"
 
 // Constructor firma
-Firma::Firma(string denumire_) : denumire{std::move(denumire_)}, money{15000} {
+[[maybe_unused]] Firma::Firma(string denumire_) : denumire{std::move(denumire_)}, money{15000} {
     string log = "A fost creata firma " + denumire + '\n';
     cout << log;
 }
 
 // Adaug referinta trenului in vectorul de flota
-void Firma::adaugareLocomotiva(Tren *myTrain) {
+[[maybe_unused]] void Firma::adaugareLocomotiva(Tren *myTrain) {
     flota.push_back(myTrain);
 }
 
 // Returnez vectorul de adrese ale trenurilor
-vector<Tren *> Firma::getFlota() const {
+[[maybe_unused]] vector<Tren *> Firma::getFlota() const {
     return flota;
 }
 
