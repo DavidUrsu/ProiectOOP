@@ -409,7 +409,7 @@ RLUTIL_INLINE int nb_getch(void) {
 
 /// Function: getANSIColor
 /// Return ANSI color escape sequence for specified number 0-15.
-///
+/// k
 /// See <Color Codes>
 RLUTIL_INLINE RLUTIL_STRING_T getANSIColor(const int c) {
 	switch (c) {

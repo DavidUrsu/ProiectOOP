@@ -6,8 +6,6 @@
 #include "Headers/Harta.h"
 #include "Headers/Firma.h"
 #include "Headers/Tren.h"
-#include "Headers/Fabrica.h"
-#include "Headers/CaleFerata.h"
 
 using namespace std;
 
@@ -66,9 +64,8 @@ void updateInterfata(Firma *myCompany, Harta *hartaJoc, int codAfisare = 0) {
 }
 
 int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
-    int key;
     while (true) {
-        key = rlutil::getkey(); // apel blocant; apelează kbhit și getch
+        int key = rlutil::getkey(); // apel blocant; apelează kbhit și getch
         key = tolower(key);
 
         if (key == 'p') {
