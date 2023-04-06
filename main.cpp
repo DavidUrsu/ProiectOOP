@@ -69,7 +69,7 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
         key = tolower(key);
 
         if (key == 'p') {
-            system("cls");
+            rlutil::cls();
             return 0;
         }
         if (key == 'u') {
@@ -103,7 +103,8 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
             cout << "C - Cumpara vagoane pentru locomotiva - pret 100$/vagon" << endl;
             cout << "V - Vinde vagoanele locomotivei - ramburs: 70$/vagon" << endl;
             while (true) {
-                key = getch();
+                key = rlutil::getkey(); // apel blocant; apelează kbhit și getch
+                key = tolower(key);
                 if (key == 'c') {
                     cout << "Numarul de vagoane pe care doresti sa-l cumperi: ";
                     int aux;
@@ -128,6 +129,10 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
 }
 
 int main() {
+    rlutil::setConsoleTitle("Train Mania");
+    rlutil::saveDefaultColor();
+    rlutil::setColor(rlutil::WHITE);
+
     Firma myCompany("Deivid Transportation");
     Harta hartaJoc;
 
