@@ -380,64 +380,70 @@ namespace rlutil {
 /// Note:
 /// Only Arrows, Esc, Enter and Space are currently working properly.
     RLUTIL_INLINE int getkey(void) {
-        if(runs_on_ci())
-            return getchar();
+    if(runs_on_ci())
+        return getchar();
 
 #ifndef _WIN32
-        int cnt = kbhit(); // for ANSI escapes processing
+    int cnt = kbhit(); // for ANSI escapes processing
 #endif
-        int k = getch();
-        switch(k) {
-            case 0: {
-                int kk;
-                switch (kk = getch()) {
-                    case 71: return KEY_NUMPAD7;
-                    case 72: return KEY_NUMPAD8;
-                    case 73: return KEY_NUMPAD9;
-                    case 75: return KEY_NUMPAD4;
-                    case 77: return KEY_NUMPAD6;
-                    case 79: return KEY_NUMPAD1;
-                    case 80: return KEY_NUMPAD2;
-                    case 81: return KEY_NUMPAD3;
-                    case 82: return KEY_NUMPAD0;
-                    case 83: return KEY_NUMDEL;
-                    default: return kk-59+KEY_F1; // Function keys
-                }}
-            case 224: {
-                int kk;
-                switch (kk = getch()) {
-                    case 71: return KEY_HOME;
-                    case 72: return KEY_UP;
-                    case 73: return KEY_PGUP;
-                    case 75: return KEY_LEFT;
-                    case 77: return KEY_RIGHT;
-                    case 79: return KEY_END;
-                    case 80: return KEY_DOWN;
-                    case 81: return KEY_PGDOWN;
-                    case 82: return KEY_INSERT;
-                    case 83: return KEY_DELETE;
-                    default: return kk-123+KEY_F1; // Function keys
-                }}
-            case 13: return KEY_ENTER;
-#ifdef _WIN32
-            case 27: return KEY_ESCAPE;
-#else // _WIN32
-                case 155: // single-character CSI
-		case 27: {
-			// Process ANSI escape sequences
-			if (cnt >= 3 && getch() == '[') {
-				switch (k = getch()) {
-					case 'A': return KEY_UP;
-					case 'B': return KEY_DOWN;
-					case 'C': return KEY_RIGHT;
-					case 'D': return KEY_LEFT;
-				}
-			} else return KEY_ESCAPE;
-		}
-#endif // _WIN32
-            default: return k;
+    int k = getch();
+    switch(k) {
+        case 0: {
+            int kk;
+            switch (kk = getch()) {
+                case 71: return KEY_NUMPAD7;
+                case 72: return KEY_NUMPAD8;
+                case 73: return KEY_NUMPAD9;
+                case 75: return KEY_NUMPAD4;
+                case 77: return KEY_NUMPAD6;
+                case 79: return KEY_NUMPAD1;
+                case 80: return KEY_NUMPAD2;
+                case 81: return KEY_NUMPAD3;
+                case 82: return KEY_NUMPAD0;
+                case 83: return KEY_NUMDEL;
+                default: return kk-59+KEY_F1; // Function keys
+            }
+            break; // Added break statement
         }
+        case 224: {
+            int kk;
+            switch (kk = getch()) {
+                case 71: return KEY_HOME;
+                case 72: return KEY_UP;
+                case 73: return KEY_PGUP;
+                case 75: return KEY_LEFT;
+                case 77: return KEY_RIGHT;
+                case 79: return KEY_END;
+                case 80: return KEY_DOWN;
+                case 81: return KEY_PGDOWN;
+                case 82: return KEY_INSERT;
+                case 83: return KEY_DELETE;
+                default: return kk-123+KEY_F1; // Function keys
+            }
+            break; // Added break statement
+        }
+        case 13: return KEY_ENTER;
+#ifdef _WIN32
+        case 27: return KEY_ESCAPE;
+#else // _WIN32
+        case 155: // single-character CSI
+        case 27: {
+            // Process ANSI escape sequences
+            if (cnt >= 3 && getch() == '[') {
+                switch (k = getch()) {
+                    case 'A': return KEY_UP;
+                    case 'B': return KEY_DOWN;
+                    case 'C': return KEY_RIGHT;
+                    case 'D': return KEY_LEFT;
+                    default: break; // Added break statement
+                }
+            } else return KEY_ESCAPE;
+            break; // Added break statement
+        }
+#endif // _WIN32
+        default: return k;
     }
+}
 
 /// Function: nb_getch
 /// Non-blocking getch(). Returns 0 if no key was pressed.
