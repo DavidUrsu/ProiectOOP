@@ -443,7 +443,6 @@ namespace rlutil {
 #endif // _WIN32
         default: return k;
         }
-        return 0;
     }
 
 /// Function: nb_getch

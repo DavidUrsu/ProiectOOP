@@ -24,8 +24,8 @@ T my_rand(T max) {
 Fabrica::Fabrica(string materialProdus_, string materialCerut_, string denumire_) : materialProdus{
         std::move(materialProdus_)}, materialCerut{std::move(materialCerut_)}, denumire{std::move(denumire_)},
                                                                                     coordonateX{
-                                                                                            my_rand(100)},
-                                                                                    coordonateY{my_rand(20)} {
+                                                                                            my_rand(99)},
+                                                                                    coordonateY{my_rand(19)} {
     // verific daca fabrica nu este fabrica null
     if (materialProdus != "!") {
         string log = "S-a creat o fabrica " + denumire + " ce produce " + materialProdus + ", avand nevoie de " +
@@ -72,8 +72,8 @@ string Fabrica::getMaterialCerut() {
 
 // Regenerare coordonate ale fabricii
 void Fabrica::regenerareCoordonate() {
-    coordonateX = my_rand(100);
-    coordonateY = my_rand(20);
+    coordonateX = my_rand(99);
+    coordonateY = my_rand(19);
 }
 
 // operator pentru afisare
