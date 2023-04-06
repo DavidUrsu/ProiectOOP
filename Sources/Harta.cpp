@@ -5,17 +5,7 @@
 #include "../Headers/Harta.h"
 
 // constructor harta
-Harta::Harta() {
-    for (int i = 0; i < 20; i++) {
-        vector<char> linie;
-        // Adaug caracterul standard al hartii
-        linie.reserve(100);
-        for (int j = 0; j < 100; j++) {
-            linie.push_back(caracterBackgrond);
-        }
-        vectorHarta.push_back(linie);
-    }
-}
+Harta::Harta() : caracterBackgrond{'.'}, vectorHarta(20, vector<char>(100, caracterBackgrond)){}
 
 // Functie prin care afisez harta
 void Harta::afisareHarta() {
