@@ -387,63 +387,54 @@ namespace rlutil {
         int cnt = kbhit(); // for ANSI escapes processing
 #endif
         int k = getch();
-        switch(k) {
-            case 0: {
-                int kk;
-                switch (kk = getch()) {
-                    case 71: return KEY_NUMPAD7;
-                    case 72: return KEY_NUMPAD8;
-                    case 73: return KEY_NUMPAD9;
-                    case 75: return KEY_NUMPAD4;
-                    case 77: return KEY_NUMPAD6;
-                    case 79: return KEY_NUMPAD1;
-                    case 80: return KEY_NUMPAD2;
-                    case 81: return KEY_NUMPAD3;
-                    case 82: return KEY_NUMPAD0;
-                    case 83: return KEY_NUMDEL;
-                    default: return kk-59+KEY_F1; // Function keys
-                }
-                break; // Added break statement
-            }
-            case 224: {
-                int kk;
-                switch (kk = getch()) {
-                    case 71: return KEY_HOME;
-                    case 72: return KEY_UP;
-                    case 73: return KEY_PGUP;
-                    case 75: return KEY_LEFT;
-                    case 77: return KEY_RIGHT;
-                    case 79: return KEY_END;
-                    case 80: return KEY_DOWN;
-                    case 81: return KEY_PGDOWN;
-                    case 82: return KEY_INSERT;
-                    case 83: return KEY_DELETE;
-                    default: return kk-123+KEY_F1; // Function keys
-                }
-                break; // Added break statement
-            }
-            case 13: return KEY_ENTER;
-#ifdef _WIN32
-            case 27: return KEY_ESCAPE;
-#else // _WIN32
-                case 155: // single-character CSI
-        case 27: {
-            // Process ANSI escape sequences
-            if (cnt >= 3 && getch() == '[') {
-                switch (k = getch()) {
-                    case 'A': return KEY_UP;
-                    case 'B': return KEY_DOWN;
-                    case 'C': return KEY_RIGHT;
-                    case 'D': return KEY_LEFT;
-                    default: break; // Added break statement
-                }
-            } else return KEY_ESCAPE;
-            break; // Added break statement
+        if (k == 0) {
+            int kk = getch();
+            if (kk == 71) return KEY_NUMPAD7;
+            if (kk == 72) return KEY_NUMPAD8;
+            if (kk == 73) return KEY_NUMPAD9;
+            if (kk == 75) return KEY_NUMPAD4;
+            if (kk == 77) return KEY_NUMPAD6;
+            if (kk == 79) return KEY_NUMPAD1;
+            if (kk == 80) return KEY_NUMPAD2;
+            if (kk == 81) return KEY_NUMPAD3;
+            if (kk == 82) return KEY_NUMPAD0;
+            if (kk == 83) return KEY_NUMDEL;
+            return kk - 59 + KEY_F1; // Function keys
         }
-#endif // _WIN32
-        default: return k;
+        if (k == 224) {
+            int kk = getch();
+            if (kk == 71) return KEY_HOME;
+            if (kk == 72) return KEY_UP;
+            if (kk == 73) return KEY_PGUP;
+            if (kk == 75) return KEY_LEFT;
+            if (kk == 77) return KEY_RIGHT;
+            if (kk == 79) return KEY_END;
+            if (kk == 80) return KEY_DOWN;
+            if (kk == 81) return KEY_PGDOWN;
+            if (kk == 82) return KEY_INSERT;
+            if (kk == 83) return KEY_DELETE;
+            return kk - 123 + KEY_F1; // Function keys
+        }
+        if (k == 13) return KEY_ENTER;
+#ifdef _WIN32
+        if (k == 27) return KEY_ESCAPE;
+#else // _WIN32
+        if (k == 155 || k == 27) { // single-character CSI or ESC
+        // Process ANSI escape sequences
+        if (cnt >= 3 && getch() == '[') {
+            int kk = getch();
+            if (kk == 'A') return KEY_UP;
+            if (kk == 'B') return KEY_DOWN;
+            if (kk == 'C') return KEY_RIGHT;
+            if (kk == 'D') return KEY_LEFT;
+        } else {
+            return KEY_ESCAPE;
         }
     }
+#endif // _WIN32
+        return k;
+    }
+
 
 /// Function: nb_getch
 /// Non-blocking getch(). Returns 0 if no key was pressed.
