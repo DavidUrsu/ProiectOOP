@@ -25,15 +25,7 @@ Fabrica::Fabrica(string materialProdus_, string materialCerut_, string denumire_
         std::move(materialProdus_)}, materialCerut{std::move(materialCerut_)}, denumire{std::move(denumire_)},
                                                                                     coordonateX{
                                                                                             my_rand(99)},
-                                                                                    coordonateY{my_rand(19)} {
-    // verific daca fabrica nu este fabrica null
-    if (materialProdus != "!") {
-        string log = "S-a creat o fabrica " + denumire + " ce produce " + materialProdus + ", avand nevoie de " +
-                     materialCerut + ", la coordonatele " + to_string(coordonateX) + " " + to_string(coordonateY) +
-                     ".\n";
-        cout << log;
-    }
-}
+                                                                                    coordonateY{my_rand(19)} {}
 
 // Deconstructor al fabricii
 Fabrica::~Fabrica() {

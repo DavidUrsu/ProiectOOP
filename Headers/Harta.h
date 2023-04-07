@@ -17,7 +17,7 @@ class Harta {
     char caracterBackgrond = '.'; // ▒ char(176) - daca reusesc sa fac unicode-ul sa mearga
 
     // Harta este de dimensiunea 20 pe 100
-    // un vector bidimensionat de caractere ce reprezinta harta bidimensionala
+    // un vector bidimensional de caractere ce reprezinta harta
     vector<vector<char>> vectorHarta;
 
     // Vector prin care se memoreaza toate fabricile de pe harta
@@ -36,12 +36,14 @@ public:
     // Suprascriere functie
     void actualizareHarta(Fabrica *myFabrica);
 
+    // Suprascriere functie
     void actualizareHarta(CaleFerata *myCaleFerata);
 
     // Functie prin care se afiseaza lista tuturor fabricilor de pe harta
     void afisareListaFabrici();
 
-    void construireCaleFerata(const string &fabrica1, const string &fabrica2);
+    // Functia ce construieste calea ferata de la o fabrica la alta
+    int construireCaleFerata(const string &fabrica1, const string &fabrica2);
 
     // operator pentru afisare
     friend ostream &operator<<(ostream &out, const Harta &myHarta);

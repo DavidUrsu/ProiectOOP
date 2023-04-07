@@ -36,6 +36,7 @@ void afisareComenzi(){
 }
 
 void updateInterfata(Firma *myCompany, Harta *hartaJoc, int codAfisare = 0) {
+    // clear screen
     rlutil::cls();
     afisareLogo();
 
@@ -52,7 +53,8 @@ void updateInterfata(Firma *myCompany, Harta *hartaJoc, int codAfisare = 0) {
     hartaJoc->afisareListaFabrici();
 
     // In functie de codul primit se afiseaza detaliile hartii
-    // cod 0 - afiseaza lista comenzi si delimitarea sectiunii de log-uri
+    // cod 0 - afiseaza lista comenzi si delimitarea sectiunii de log-uri, default case
+    // cod 1 - afiseaza subtitlul pentru locomotive
     if (codAfisare == 0) {
         afisareComenzi();
 
@@ -69,6 +71,7 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
         key = tolower(key);
 
         if (key == 'p') {
+            // Se inchide jocul
             rlutil::cls();
             return 0;
         }
@@ -76,21 +79,24 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
             updateInterfata(myCompany, hartaJoc);
         }
         if (key == 'c') {
+            // Se citeste numele fabricilor intre care se construieste drumul
             string fabrica1, fabrica2;
             cout << "Prima fabrica: ";
             cin >> fabrica1;
             cout << "A doua fabrica: ";
             cin >> fabrica2;
-            hartaJoc->construireCaleFerata(fabrica1, fabrica2);
-            updateInterfata(myCompany, hartaJoc);
+            // Se construieste calea ferata si se verifica daca s-a efectuat cu succes
+            if(hartaJoc->construireCaleFerata(fabrica1, fabrica2) == 0)
+                // In cazul in care s-a reusit constructia, se face refresh la interfata
+                updateInterfata(myCompany, hartaJoc);
         }
         if (key == 'l') {
-            // Curatare interfata, ramane doar harta si lista de fabrici
+            // Refresh interfata, ramane doar harta si lista de fabrici
             updateInterfata(myCompany, hartaJoc, 1);
 
-            // Obtin vectorul ce contine adresele tuturor locomotivelor
+            // Se obtine vectorul ce contine adresele tuturor locomotivelor
             vector<Tren *> flota = myCompany->getFlota();
-            // Afisez detaliile tuturor locomotivelor
+            // Se afiseaza detaliile tuturor locomotivelor
             for (unsigned int i = 0; i < flota.size(); i++)
                 cout << i + 1 << ". " << *flota[i] << endl;
 
@@ -98,7 +104,7 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
             int selectLocomotiva;
             cin >> selectLocomotiva;
 
-            // selectare comanda de efectuare asupra locomotivei
+            // Selectarea comenzii de modificat locomotiva
             delimitareSectiune("Comenzi");
             cout << "C - Cumpara vagoane pentru locomotiva - pret 100$/vagon" << endl;
             cout << "V - Vinde vagoanele locomotivei - ramburs: 70$/vagon" << endl;
@@ -106,6 +112,7 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                 key = rlutil::getkey(); // apel blocant; apelează kbhit și getch
                 key = tolower(key);
                 if (key == 'c') {
+                    // Cumparare vagoane
                     cout << "Numarul de vagoane pe care doresti sa-l cumperi: ";
                     int aux;
                     cin >> aux;
@@ -114,6 +121,7 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                     break;
                 }
                 if (key == 'v') {
+                    // Vindere vagoane
                     cout << "Numarul de vagoane pe care doresti sa-l vinzi: ";
                     int aux;
                     cin >> aux;

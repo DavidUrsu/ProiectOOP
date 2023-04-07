@@ -18,7 +18,7 @@ Tren::~Tren() {
     cout << "S-a vandut locomotiva " << model << endl;
 }
 
-// Functie prin care se adauga vagoane la tren
+// Functie prin care se adauga in vectorul de incarcatura, adrese ale vagoanelor noi create
 void Tren::cuplareVagone(int numarVagoane, Firma *myCompany, int indexTren) {
 
     // verific bugetul companiei
@@ -41,7 +41,7 @@ void Tren::cuplareVagone(int numarVagoane, Firma *myCompany, int indexTren) {
     }
 }
 
-// Functie prin care se elimina vagoanele unui tren
+// Functie prin care efectuez stergerea obiectelor "vagon" si scoaterea adreselor din vectorul "incarcatura"
 void Tren::decuplareVagone(int numarVagoane, Firma *myCompany, int indexTren) {
     // Verific cazul daca sterg mai multe vagoane decat sunt atasate trenului
     if (numarVagoane > int(incarcatura.size())) {

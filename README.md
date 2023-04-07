@@ -1,5 +1,19 @@
-# OOP Template
+# Train Mania
 
+Un joc 2D în care trebuie să construiești o rețea feroviară eficientă pentru a transporta materiale între diferite fabrici. Scopul jocului este de a satisface cererile și ofertele fiecărei fabrici și de a câștiga profit prin vânzarea de materiale.
+
+#### Implementat:
+
+- Posibilitatea de a adăuga sau a vinde vagoanele unei locomotive
+- Construirea de căi ferate între două fabrici
+- Sistemul de valută al jocului
+
+#### De implementat:
+
+- Fabrici mai multe, realizate după un template
+- Setarea unui traseul al trenului
+- Posibilitatea de a cumpăra modele de locomotive
+- Money-reward în funcție de distanța parcursă și valoarea produselor
 ### Tema 0
 
 - [ ] Nume proiect (poate fi schimbat ulterior)

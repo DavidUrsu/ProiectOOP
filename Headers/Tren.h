@@ -15,7 +15,9 @@ using namespace std;
 
 class Tren {
     string model;
+    // Puterea de tractiune se refera la numarul maxim de vagoane pe care un tren il poate transporta
     int putereDeTractiune;
+    // In vectorul incarcatura, se vor retine toate adresele vagoanelor trenului
     vector<Vagon *> incarcatura;
 
 public:
@@ -25,10 +27,10 @@ public:
     // Deconstructor tren
     ~Tren();
 
-    //
+    // Functie prin care se adauga in vectorul "incarcatura", adresele vagoanelor noi create
     void cuplareVagone(int numarVagoane, Firma *myCompany, int indexTren);
 
-    //
+    // Functie prin care se realizeaza stergerea obiectelor "vagon" si scoaterea adreselor din vectorul "incarcatura"
     void decuplareVagone(int numarVagoane, Firma *myCompany, int indexTren);
 
     // operator pentru afisare

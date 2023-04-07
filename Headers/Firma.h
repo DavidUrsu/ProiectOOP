@@ -38,10 +38,10 @@ public:
     // Getter pentru banii firmei
     [[nodiscard]] int getMoney() const;
 
-    // Functie pentru debitarea unei anumite sume din cont-ul firmei
+    // Functie pentru debitarea unei anumite sume din contul firmei
     void buyWithMoney(int sumaDebitata);
 
-    // Functie pentru adaugare de bani in cont-ul firmei
+    // Functie pentru adaugare de bani in contul firmei
     void addMoney(int sumaCastigata);
 };
 

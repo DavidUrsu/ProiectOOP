@@ -11,8 +11,10 @@
 using namespace std;
 
 class Vagon {
+    // capacitatea maxima reprezinta tonajul maxim de marfa pe care un vagon il poate transporta
     int capacitateMaxima;
     string denumireMarfa;
+    // momentan nu au nicio utilizare variabilele
 
 public:
     // Constructor vagon
