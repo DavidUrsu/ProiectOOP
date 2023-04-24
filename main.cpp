@@ -37,7 +37,7 @@ void afisareComenzi(){
 
 void updateInterfata(Firma *myCompany, Harta *hartaJoc, int codAfisare = 0) {
     // clear screen
-    rlutil::cls();
+    // rlutil::cls();
     afisareLogo();
 
     delimitareSectiune("");
