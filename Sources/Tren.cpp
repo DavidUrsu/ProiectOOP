@@ -16,6 +16,9 @@ Tren::Tren(string model_, int putereDeTractiune_) : model{std::move(model_)}, pu
 // Deconstructor tren
 Tren::~Tren() {
     cout << "S-a vandut locomotiva " << model << endl;
+    for(auto i : incarcatura){
+        delete(i);
+    }
 }
 
 // Functie prin care se adauga in vectorul de incarcatura, adrese ale vagoanelor noi create
