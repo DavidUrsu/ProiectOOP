@@ -9,6 +9,25 @@
 
 using namespace std;
 
+bool isNumber(const std::string& str) {
+    int ok = true;
+    // Check if the string is empty
+    if (str.empty()) {
+        ok = false;
+    }
+
+    // Check each character of the string
+    for (char c : str) {
+        // Check if the character is a digit
+        if (!std::isdigit(c)) {
+            ok = false;
+        }
+    }
+
+    // All characters are digits, so it's a number
+    return ok;
+}
+
 void afisareLogo() {
     cout << R"( _______        _         __  __             _       )" << endl;
     cout << R"(|__   __|      (_)       |  \/  |           (_)      )" << endl;
@@ -89,6 +108,9 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
             if(hartaJoc->construireCaleFerata(fabrica1, fabrica2) == 0)
                 // In cazul in care s-a reusit constructia, se face refresh la interfata
                 updateInterfata(myCompany, hartaJoc);
+            else
+                // In caz contrar se afiseaza din nou comenzile
+                afisareComenzi();
         }
         if (key == 'l') {
             // Refresh interfata, ramane doar harta si lista de fabrici
@@ -101,8 +123,18 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                 cout << i + 1 << ". " << *flota[i] << endl;
 
             cout << "Introdu indicele locomotivei pe care doresti sa o modifici: ";
+            string selectLocomotivaString;
+            cin >> selectLocomotivaString;
+
             int selectLocomotiva;
-            cin >> selectLocomotiva;
+            // Se verifica input-ul
+            if (isNumber(selectLocomotivaString) && stoi(selectLocomotivaString) < int(flota.size()+1)){
+                selectLocomotiva = stoi(selectLocomotivaString);
+            } else {
+                cout << selectLocomotivaString + " " + "nu face parte din flota!" << endl;
+                afisareComenzi();
+                continue;
+            }
 
             // Selectarea comenzii de modificat locomotiva
             delimitareSectiune("Comenzi");
@@ -114,8 +146,17 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                 if (key == 'c') {
                     // Cumparare vagoane
                     cout << "Numarul de vagoane pe care doresti sa-l cumperi: ";
+                    string auxString;
+                    cin >> auxString;
+                    // Se verifica input-ul
                     int aux;
-                    cin >> aux;
+                    if (isNumber(auxString)){
+                        aux = stoi(auxString);
+                    } else {
+                        cout << auxString + " " + "nu este un numar!" << endl;
+                        break;
+                    }
+
                     delimitareSectiune("Logs");
                     flota[selectLocomotiva - 1]->cuplareVagone(aux, myCompany, selectLocomotiva - 1);
                     break;
@@ -123,8 +164,16 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                 if (key == 'v') {
                     // Vindere vagoane
                     cout << "Numarul de vagoane pe care doresti sa-l vinzi: ";
+                    string auxString;
+                    cin >> auxString;
+                    // Se verifica input-ul
                     int aux;
-                    cin >> aux;
+                    if (isNumber(auxString)){
+                        aux = stoi(auxString);
+                    } else {
+                        cout << auxString + " " + "nu este un numar!" << endl;
+                        break;
+                    }
                     delimitareSectiune("Logs");
                     flota[selectLocomotiva - 1]->decuplareVagone(aux, myCompany, selectLocomotiva - 1);
                     break;

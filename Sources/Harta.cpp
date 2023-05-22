@@ -45,6 +45,8 @@ void Harta::afisareListaFabrici() {
 // - 0 daca reuseste sa construiasca calea ferata
 // - 1 daca nu reuseste sa construiasca calea ferata
 int Harta::construireCaleFerata(const string &fabrica1, const string &fabrica2) {
+    // Se verifica daca fabricile sunt distincte
+    if (fabrica1 == fabrica2) return 0;
     // Se initializeaza coordonatele cu valori negative pentru a facilita gasirea erorilor
     int x1 = -1, x2 = -1, y1 = -1, y2 = -1;
     // Se gasesc coordonatele fabricilor intre care se construieste calea ferata
