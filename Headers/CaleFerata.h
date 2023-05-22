@@ -17,6 +17,9 @@ public:
     // Constructor CaleFerata
     CaleFerata(int coordonateX_, int coordonateY_, char simbolHarta_ = '+'); //╬ char(206)
 
+    // Deconstructor CaleFerata
+    ~CaleFerata();
+
     // Getter coordonate X ale caii ferate
     [[nodiscard]] int getX() const;
 

@@ -29,6 +29,9 @@ public:
     // constructor harta
     Harta();
 
+    // Deconstructor harta
+    ~Harta();
+
     // Functie prin care afisez harta
     void afisareHarta();
 

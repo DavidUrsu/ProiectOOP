@@ -29,3 +29,7 @@ ostream &operator<<(ostream &out, const CaleFerata &myCaleFerata) {
     out << myCaleFerata.coordonateX << myCaleFerata.coordonateY;
     return out;
 }
+
+CaleFerata::~CaleFerata() {
+    cout << "S-a distrus o cale ferata!" << endl;
+}

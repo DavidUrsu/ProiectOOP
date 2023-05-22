@@ -7,6 +7,12 @@
 // constructor harta
 Harta::Harta() : caracterBackgrond{'.'}, vectorHarta(20, vector<char>(100, caracterBackgrond)){}
 
+Harta::~Harta() {
+    for(auto i : listaCaleFerata){
+        delete(i);
+    }
+}
+
 // Functie prin care afisez harta
 void Harta::afisareHarta() {
     for (int i = 19; i >= 0; i--) {
