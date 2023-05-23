@@ -22,7 +22,13 @@ T my_rand(T max) {
 
 // Constructor al fabricii
 Fabrica::Fabrica(string materialProdus_, string materialCerut_, string denumire_, int stocMaterialNecesar_) :
-    materialProdus{ std::move(materialProdus_)}, materialCerut{std::move(materialCerut_)}, denumire{std::move(denumire_)}, coordonateX{my_rand(99)}, coordonateY{my_rand(19)}, stocMaterialNecesar{stocMaterialNecesar_}, stocProdusFinal{0} {}
+    materialProdus{ std::move(materialProdus_)},
+    materialCerut{std::move(materialCerut_)},
+    denumire{std::move(denumire_)},
+    coordonateX{my_rand(99)},
+    coordonateY{my_rand(19)},
+    stocMaterialNecesar{stocMaterialNecesar_},
+    stocProdusFinal{0} {}
 
 // Deconstructor al fabricii
 Fabrica::~Fabrica() {

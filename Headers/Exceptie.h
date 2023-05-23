@@ -10,13 +10,13 @@ using namespace std;
 
 class Exceptie : public std::exception {
 private:
-    char *message;
+    const char *message;
 
 public:
-    explicit Exceptie(char *msg) : message(msg) {}
+    explicit Exceptie(const char *msg) : message(msg) {}
 
     using exception::what;
-    [[maybe_unused]]virtual char* what () {
+    [[maybe_unused]]virtual const char* what () {
         return message;
     }
 };

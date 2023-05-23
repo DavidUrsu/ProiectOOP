@@ -141,11 +141,7 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                 if (isNumber(selectLocomotivaString) && stoi(selectLocomotivaString) < int(flota.size() + 1)) {
                     selectLocomotiva = stoi(selectLocomotivaString);
                 } else {
-                    string eroareString = selectLocomotivaString + " " + "nu face parte din flota!";
-                    char* eroare = new char[eroareString.length() + 1];
-                    strcpy(eroare, eroareString.c_str());
-
-                    throw Exceptie(eroare);
+                    throw Exceptie("Locomotiva introdusa nu face parte din flota!");
                 }
             } catch (Exceptie& error){
                 cout << error.what() << endl;
@@ -172,11 +168,7 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                         if (isNumber(auxString)){
                             aux = stoi(auxString);
                         } else {
-                            string eroareString = auxString + " " + "nu este un numar!";
-                            char* eroare = new char[eroareString.length() + 1];
-                            strcpy(eroare, eroareString.c_str());
-
-                            throw Exceptie(eroare);
+                            throw Exceptie("Valoarea introdusa nu este un numar!");
                         }
                     } catch (Exceptie& error){
                         cout << error.what() << endl;
@@ -199,11 +191,7 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                         if (isNumber(auxString)){
                             aux = stoi(auxString);
                         } else {
-                            string eroareString = auxString + " " + "nu este un numar!";
-                            char* eroare = new char[eroareString.length() + 1];
-                            strcpy(eroare, eroareString.c_str());
-
-                            throw Exceptie(eroare);
+                            throw Exceptie("Valoarea introdusa nu este un numar!");
                         }
                     } catch (Exceptie& error){
                         cout << error.what() << endl;

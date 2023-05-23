@@ -23,7 +23,12 @@ T my_rand(T max) {
 }
 
 // Constructor al fabricii
-FabricaDeMobila::FabricaDeMobila(string materialProdus_, string materialCerut_, string denumire_, int stocMaterialNecesar_) : Fabrica(std::move(materialProdus_), std::move(materialCerut_), std::move(denumire_), stocMaterialNecesar_) {}
+FabricaDeMobila::FabricaDeMobila(string materialProdus_, string materialCerut_, string denumire_, int stocMaterialNecesar_) :
+    Fabrica(
+            std::move(materialProdus_),
+            std::move(materialCerut_),
+            std::move(denumire_),
+            stocMaterialNecesar_) {}
 
 void FabricaDeMobila::produce(){
     int stocMaterialNecesar = this->getStocMaterialNecesar();
