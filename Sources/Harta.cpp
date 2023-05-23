@@ -31,6 +31,7 @@ void Harta::actualizareHarta(Fabrica *myFabrica) {
     // Se adauga fabrica in vectorul ce le tine evidenta
     listaFabrici.push_back(myFabrica);
 }
+
 // Suprascriere functie
 void Harta::actualizareHarta(CaleFerata *myCaleFerata) {
     // Se adauga simbolul caii ferate pe harta
@@ -41,8 +42,7 @@ void Harta::actualizareHarta(CaleFerata *myCaleFerata) {
 void Harta::afisareListaFabrici() {
     // Se parcurge vectorul de fabrici
     for (auto &i: listaFabrici) {
-        cout << i->getDenumire() << " || Cere: " << i->getMaterialCerut() << " || Ofera: " << i->getMaterialOferit()
-             << " || X: " << i->getX() << " Y: " << i->getY() << endl;
+        cout << i->getDenumire() << " || Cere: " << i->getMaterialCerut() << " | Stoc: " << i->getStocMaterialNecesar() << " || Ofera: " << i->getMaterialOferit() << " | Stoc: " << i->getStocProdusFinal() << " || X: " << i->getX() << " Y: " << i->getY() << endl;
     }
 }
 
@@ -123,4 +123,11 @@ ostream &operator<<(ostream &out, const Harta &myHarta) {
         out << endl;
     }
     return out;
+}
+
+// Functie periodica ce initiaza functia de producere a fabricilor
+void Harta::produceFabrici() {
+    for(auto i : listaFabrici){
+        i->produce();
+    }
 }

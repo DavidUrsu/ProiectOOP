@@ -6,8 +6,9 @@
 #ifndef OOP_HARTA_H
 #define OOP_HARTA_H
 
-#include "iostream"
-#include "vector"
+#include<iostream>
+#include<vector>
+#include<ctime>
 
 #include "CaleFerata.h"
 #include "Fabrica.h"
@@ -47,6 +48,9 @@ public:
 
     // Functia ce construieste calea ferata de la o fabrica la alta
     int construireCaleFerata(const string &fabrica1, const string &fabrica2);
+
+    // Functie periodica ce initiaza functia de producere a fabricilor
+    [[maybe_unused]] void produceFabrici();
 
     // operator pentru afisare
     friend ostream &operator<<(ostream &out, const Harta &myHarta);

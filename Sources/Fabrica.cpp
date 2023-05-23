@@ -21,11 +21,8 @@ T my_rand(T max) {
 }
 
 // Constructor al fabricii
-Fabrica::Fabrica(string materialProdus_, string materialCerut_, string denumire_) : materialProdus{
-        std::move(materialProdus_)}, materialCerut{std::move(materialCerut_)}, denumire{std::move(denumire_)},
-                                                                                    coordonateX{
-                                                                                            my_rand(99)},
-                                                                                    coordonateY{my_rand(19)} {}
+Fabrica::Fabrica(string materialProdus_, string materialCerut_, string denumire_, int stocMaterialNecesar_) :
+    materialProdus{ std::move(materialProdus_)}, materialCerut{std::move(materialCerut_)}, denumire{std::move(denumire_)}, coordonateX{my_rand(99)}, coordonateY{my_rand(19)}, stocMaterialNecesar{stocMaterialNecesar_}, stocProdusFinal{0} {}
 
 // Deconstructor al fabricii
 Fabrica::~Fabrica() {
@@ -72,4 +69,20 @@ void Fabrica::regenerareCoordonate() {
 ostream &operator<<(ostream &out, const Fabrica &myFabrica) {
     out << myFabrica.denumire;
     return out;
+}
+
+int Fabrica::getStocMaterialNecesar() const {
+    return stocMaterialNecesar;
+}
+
+int Fabrica::getStocProdusFinal() const {
+    return stocProdusFinal;
+}
+
+void Fabrica::setStocMaterialNecesar(int newVal) {
+    stocMaterialNecesar = newVal;
+}
+
+void Fabrica::setStocProdusFinal(int newVal) {
+    stocProdusFinal = newVal;
 }

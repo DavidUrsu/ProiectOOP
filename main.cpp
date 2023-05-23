@@ -6,6 +6,11 @@
 #include "Headers/Harta.h"
 #include "Headers/Firma.h"
 #include "Headers/Tren.h"
+#include "Headers/FabricaDeMobila.h"
+#include "Headers/Lumbermill.h"
+#include "Headers/Exceptie.h"
+
+#include<string>
 
 using namespace std;
 
@@ -85,6 +90,8 @@ void updateInterfata(Firma *myCompany, Harta *hartaJoc, int codAfisare = 0) {
 }
 
 int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
+    // Ultima data cand au fost rulate functiile periodice
+    time_t lastUpdate = long(time(nullptr));
     while (true) {
         int key = rlutil::getkey(); // apel blocant; apelează kbhit și getch
         key = tolower(key);
@@ -122,16 +129,26 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
             for (unsigned int i = 0; i < flota.size(); i++)
                 cout << i + 1 << ". " << *flota[i] << endl;
 
+
+
             cout << "Introdu indicele locomotivei pe care doresti sa o modifici: ";
             string selectLocomotivaString;
             cin >> selectLocomotivaString;
 
             int selectLocomotiva;
             // Se verifica input-ul
-            if (isNumber(selectLocomotivaString) && stoi(selectLocomotivaString) < int(flota.size()+1)){
-                selectLocomotiva = stoi(selectLocomotivaString);
-            } else {
-                cout << selectLocomotivaString + " " + "nu face parte din flota!" << endl;
+            try {
+                if (isNumber(selectLocomotivaString) && stoi(selectLocomotivaString) < int(flota.size() + 1)) {
+                    selectLocomotiva = stoi(selectLocomotivaString);
+                } else {
+                    string eroareString = selectLocomotivaString + " " + "nu face parte din flota!";
+                    char* eroare = new char[eroareString.length() + 1];
+                    strcpy(eroare, eroareString.c_str());
+
+                    throw Exceptie(eroare);
+                }
+            } catch (Exceptie& error){
+                cout << error.what() << endl;
                 afisareComenzi();
                 continue;
             }
@@ -150,10 +167,19 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                     cin >> auxString;
                     // Se verifica input-ul
                     int aux;
-                    if (isNumber(auxString)){
-                        aux = stoi(auxString);
-                    } else {
-                        cout << auxString + " " + "nu este un numar!" << endl;
+
+                    try {
+                        if (isNumber(auxString)){
+                            aux = stoi(auxString);
+                        } else {
+                            string eroareString = auxString + " " + "nu este un numar!";
+                            char* eroare = new char[eroareString.length() + 1];
+                            strcpy(eroare, eroareString.c_str());
+
+                            throw Exceptie(eroare);
+                        }
+                    } catch (Exceptie& error){
+                        cout << error.what() << endl;
                         break;
                     }
 
@@ -168,12 +194,22 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                     cin >> auxString;
                     // Se verifica input-ul
                     int aux;
-                    if (isNumber(auxString)){
-                        aux = stoi(auxString);
-                    } else {
-                        cout << auxString + " " + "nu este un numar!" << endl;
+
+                    try {
+                        if (isNumber(auxString)){
+                            aux = stoi(auxString);
+                        } else {
+                            string eroareString = auxString + " " + "nu este un numar!";
+                            char* eroare = new char[eroareString.length() + 1];
+                            strcpy(eroare, eroareString.c_str());
+
+                            throw Exceptie(eroare);
+                        }
+                    } catch (Exceptie& error){
+                        cout << error.what() << endl;
                         break;
                     }
+
                     delimitareSectiune("Logs");
                     flota[selectLocomotiva - 1]->decuplareVagone(aux, myCompany, selectLocomotiva - 1);
                     break;
@@ -181,6 +217,18 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
             }
             afisareComenzi();
             delimitareSectiune("Logs");
+        }
+
+        // Functii periodice
+        // Timpul de cand a inceput jocul in secunde
+        time_t timpScursDeLaUltimulUpdate = time(nullptr) - lastUpdate;
+
+        if (timpScursDeLaUltimulUpdate >= 10){
+            // Se executa functiile periodice de atatea ori de cate intervale au trecut
+            for(int i=1; i<=timpScursDeLaUltimulUpdate/10; i++){
+                hartaJoc->produceFabrici();
+            }
+            lastUpdate = time(nullptr);
         }
     }
 }
@@ -198,14 +246,18 @@ int main() {
     Tren tren2("Poseidon", 20);
     myCompany.adaugareLocomotiva(&tren2);
 
-    Fabrica Lumbermill("Lemn", "-", "Lumbermill");
-    Fabrica IKEA("Mobila", "Lemn", "IKEA");
-    while (IKEA.getX() == Lumbermill.getX() || IKEA.getY() == Lumbermill.getY()) {
-        IKEA.regenerareCoordonate();
+    Lumbermill LumbermillHarta("Lemn", "-", "Lumbermill");
+    auto *pointerLumbermill = dynamic_cast<Fabrica*>(&LumbermillHarta);
+
+    FabricaDeMobila IKEA("Mobila", "Lemn", "IKEA", 100);
+    auto *pointerIKEA = dynamic_cast<Fabrica*>(&IKEA);
+
+    while (pointerIKEA->getX() == pointerLumbermill->getX() || pointerIKEA->getY() == pointerLumbermill->getY()) {
+        pointerIKEA->regenerareCoordonate();
     }
 
-    hartaJoc.actualizareHarta(&Lumbermill);
-    hartaJoc.actualizareHarta(&IKEA);
+    hartaJoc.actualizareHarta(pointerIKEA);
+    hartaJoc.actualizareHarta(pointerLumbermill);
 
     updateInterfata(&myCompany, &hartaJoc);
     asteptareInput(&myCompany, &hartaJoc);

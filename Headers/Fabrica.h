@@ -11,18 +11,21 @@
 
 using namespace std;
 
-class Fabrica {
+class Fabrica{
     string materialProdus, materialCerut, denumire;
-    int coordonateX, coordonateY;
+    int coordonateX, coordonateY, stocMaterialNecesar, stocProdusFinal;
     char simbolHarta = '#'; // ■ char(254)
 
 public:
     // Constructor al fabricii
     explicit Fabrica(string materialProdus_ = "nedefinit", string materialCerut_ = "nedefinit",
-                     string denumire_ = "nedefinit");
+                     string denumire_ = "nedefinit", int stocMaterialNecesar_ = 0);
 
     // Deconstructor al fabricii
     ~Fabrica();
+
+    // Functie virtuala pura de produs
+    virtual void produce() = 0;
 
     // Getter coordonate X ale fabricii
     [[nodiscard]] int getX() const;
@@ -41,6 +44,18 @@ public:
 
     // Getter material cerut
     string getMaterialCerut();
+
+    // Getter stocMaterialNecesar
+    [[nodiscard]] int getStocMaterialNecesar() const;
+
+    // Getter stocProdusFinal
+    [[nodiscard]] int getStocProdusFinal() const;
+
+    // Setter stocMaterialNecesar
+    void setStocMaterialNecesar(int newVal);
+
+    // Setter stocProdusFinal
+    void setStocProdusFinal(int newVal);
 
     // Regenerare coordonate ale fabricii
     void regenerareCoordonate();
