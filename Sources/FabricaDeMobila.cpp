@@ -31,10 +31,10 @@ FabricaDeMobila::FabricaDeMobila(string materialProdus_, string materialCerut_, 
             stocMaterialNecesar_) {}
 
 void FabricaDeMobila::produce(){
-    int stocMaterialNecesar = this->getStocMaterialNecesar();
+    int stoc = this->getStocMaterialNecesar();
     // Verificare stoc
-    if (stocMaterialNecesar >= 10) {
-        this->setStocMaterialNecesar(stocMaterialNecesar - 10);
+    if (stoc >= 10) {
+        this->setStocMaterialNecesar(stoc - 10);
         int stocMaterialProdus = this->getStocProdusFinal();
         // Produce o unitate finala pentru 10 unitati din stoc
         this->setStocProdusFinal(stocMaterialProdus + 1);
