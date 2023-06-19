@@ -9,6 +9,7 @@
 #include "iostream"
 #include "string"
 #include "vector"
+#include "Tren.h"
 
 using namespace std;
 
@@ -21,7 +22,10 @@ class Firma {
 
 public:
     // Constructor firma
-    explicit Firma(string denumire_ = "Unnamed Company");
+    [[maybe_unused]] [[maybe_unused]] explicit Firma(string denumire_ = "Unnamed Company");
+
+    // Deconstructor firma
+    ~Firma();
 
     // Adaug referinta trenului in vectorul de flota
     void adaugareLocomotiva(Tren *myTrain);
@@ -43,6 +47,12 @@ public:
 
     // Functie pentru adaugare de bani in contul firmei
     void addMoney(int sumaCastigata);
+
+    //suprascriere operator =
+    Firma& operator=(const Firma& firma);
+
+    //suprascriere copy constructor
+    [[maybe_unused]] Firma(const Firma& firma);
 };
 
 

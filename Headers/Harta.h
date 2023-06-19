@@ -54,6 +54,12 @@ public:
 
     // operator pentru afisare
     friend ostream &operator<<(ostream &out, const Harta &myHarta);
+
+    // Suprascriere operator =
+    Harta &operator=(const Harta &myHarta);
+
+    // Suprascriere copy constructor
+    [[maybe_unused]] Harta(const Harta &myHarta);
 };
 
 #endif //OOP_HARTA_H

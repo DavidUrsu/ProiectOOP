@@ -3,14 +3,18 @@
 //
 
 #include "../Headers/Harta.h"
+#include "../Headers/Lumbermill.h"
+#include "../Headers/FabricaDeMobila.h"
 
 // constructor harta
 Harta::Harta() : caracterBackgrond{'.'}, vectorHarta(20, vector<char>(100, caracterBackgrond)){}
 
 Harta::~Harta() {
-    for(auto i : listaCaleFerata){
+    for(auto i : listaCaleFerata)
         delete(i);
-    }
+
+    for(auto i : listaFabrici)
+        delete(i);
 }
 
 // Functie prin care afisez harta
@@ -127,7 +131,52 @@ ostream &operator<<(ostream &out, const Harta &myHarta) {
 
 // Functie periodica ce initiaza functia de producere a fabricilor
 void Harta::produceFabrici() {
-    for(auto i : listaFabrici){
-        i->produce();
+    for(Fabrica *i : listaFabrici){
+        //folosire dynamic_cast pentru a verifica daca obiectul este fabricaDeMobila sau Lumbermill, apoi apeleaza functia de producere virtuala specifica fiecarei clase
+
+        if(dynamic_cast<FabricaDeMobila*>(i))
+            dynamic_cast<FabricaDeMobila*>(i)->produce();
+
+        if(dynamic_cast<Lumbermill*>(i))
+            dynamic_cast<Lumbermill*>(i)->produce();
+    }
+}
+
+Harta &Harta::operator=(const Harta &myHarta) {
+    if (this != &myHarta) {
+        vectorHarta = myHarta.vectorHarta;
+        // pentru fiecare fabrica se creeaza o noua fabrica cu aceleasi caracteristici
+        for (auto &i: myHarta.listaFabrici) {
+            //verificare tip fabrica cu dynamic_cast
+            if (dynamic_cast<FabricaDeMobila *>(i))
+                listaFabrici.push_back(new FabricaDeMobila(i->getMaterialOferit(), i->getMaterialCerut(), i->getDenumire(), i->getStocMaterialNecesar()));
+
+            if (dynamic_cast<Lumbermill *>(i))
+                listaFabrici.push_back(new Lumbermill(i->getMaterialOferit(), i->getMaterialCerut(), i->getDenumire()));
+        }
+
+        // pentru fiecare cale ferata se creeaza o noua cale ferata cu aceleasi caracteristici
+        for (auto &i: myHarta.listaCaleFerata) {
+            listaCaleFerata.push_back(new CaleFerata(i->getX(), i->getY(), i->getSimbol()));
+        }
+    }
+    return *this;
+}
+
+[[maybe_unused]] Harta::Harta(const Harta &myHarta) {
+    vectorHarta = myHarta.vectorHarta;
+    // pentru fiecare fabrica se creeaza o noua fabrica cu aceleasi caracteristici
+    for (auto &i: myHarta.listaFabrici) {
+        //verificare tip fabrica cu dynamic_cast
+        if (dynamic_cast<FabricaDeMobila *>(i))
+            listaFabrici.push_back(new FabricaDeMobila(i->getMaterialOferit(), i->getMaterialCerut(), i->getDenumire(), i->getStocMaterialNecesar()));
+
+        if (dynamic_cast<Lumbermill *>(i))
+            listaFabrici.push_back(new Lumbermill(i->getMaterialOferit(), i->getMaterialCerut(), i->getDenumire()));
+    }
+
+    // pentru fiecare cale ferata se creeaza o noua cale ferata cu aceleasi caracteristici
+    for (auto &i: myHarta.listaCaleFerata) {
+        listaCaleFerata.push_back(new CaleFerata(i->getX(), i->getY(), i->getSimbol()));
     }
 }

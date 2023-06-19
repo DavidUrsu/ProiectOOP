@@ -3,25 +3,12 @@
 //
 
 #include "../Headers/Fabrica.h"
-#include "random"
+#include "utility.cpp"
+
 #include "iostream"
 
-// A function to return a seeded random number generator.
-inline std::mt19937 &generator() {
-    // the generator will only be seeded once (per thread) since it's static
-    static thread_local std::mt19937 gen(std::random_device{}());
-    return gen;
-}
-
-// A function to generate integers in the range [min, max]
-template<typename T, std::enable_if_t<std::is_integral_v<T>> * = nullptr>
-T my_rand(T max) {
-    std::uniform_int_distribution<T> dist(0, max);
-    return dist(generator());
-}
-
 // Constructor al fabricii
-Fabrica::Fabrica(string materialProdus_, string materialCerut_, string denumire_, int stocMaterialNecesar_) :
+[[maybe_unused]] Fabrica::Fabrica(string materialProdus_, string materialCerut_, string denumire_, int stocMaterialNecesar_) :
     materialProdus{ std::move(materialProdus_)},
     materialCerut{std::move(materialCerut_)},
     denumire{std::move(denumire_)},
@@ -51,17 +38,17 @@ char Fabrica::getSimbol() const {
 }
 
 // Getter denumire a fabricii
-string Fabrica::getDenumire() {
+string Fabrica::getDenumire() const{
     return denumire;
 }
 
 // Getter material oferit
-string Fabrica::getMaterialOferit() {
+string Fabrica::getMaterialOferit() const{
     return materialProdus;
 }
 
 // Getter material cerut
-string Fabrica::getMaterialCerut() {
+string Fabrica::getMaterialCerut() const{
     return materialCerut;
 }
 
@@ -91,4 +78,49 @@ void Fabrica::setStocMaterialNecesar(int newVal) {
 
 void Fabrica::setStocProdusFinal(int newVal) {
     stocProdusFinal = newVal;
+}
+
+Fabrica &Fabrica::operator=(const Fabrica &myFabrica) {
+    if (this != &myFabrica) {
+        materialProdus = myFabrica.materialProdus;
+        materialCerut = myFabrica.materialCerut;
+        denumire = myFabrica.denumire;
+        coordonateX = myFabrica.coordonateX;
+        coordonateY = myFabrica.coordonateY;
+        stocMaterialNecesar = myFabrica.stocMaterialNecesar;
+        stocProdusFinal = myFabrica.stocProdusFinal;
+        simbolHarta = myFabrica.simbolHarta;
+    }
+    return *this;
+}
+
+Fabrica::Fabrica(const Fabrica &myFabrica) {
+    materialProdus = myFabrica.materialProdus;
+    materialCerut = myFabrica.materialCerut;
+    denumire = myFabrica.denumire;
+    coordonateX = myFabrica.coordonateX;
+    coordonateY = myFabrica.coordonateY;
+    stocMaterialNecesar = myFabrica.stocMaterialNecesar;
+    stocProdusFinal = myFabrica.stocProdusFinal;
+    simbolHarta = myFabrica.simbolHarta;
+}
+
+void Fabrica::setMaterialProdus(string newVal) {
+    materialProdus = std::move(newVal);
+}
+
+void Fabrica::setMaterialCerut(string newVal) {
+    materialCerut = std::move(newVal);
+}
+
+void Fabrica::setDenumire(string newVal) {
+    denumire = std::move(newVal);
+}
+
+void Fabrica::setCoordonateX(int newVal) {
+    coordonateX = newVal;
+}
+
+void Fabrica::setCoordonateY(int newVal) {
+    coordonateY = newVal;
 }

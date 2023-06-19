@@ -18,12 +18,7 @@ Vagon::Vagon(const Vagon &vagonVechi) : capacitateMaxima{vagonVechi.capacitateMa
 }
 
 // Operator de copiere
-Vagon &Vagon::operator=(const Vagon &vagonVechi) {
-    capacitateMaxima = vagonVechi.capacitateMaxima;
-    denumireMarfa = vagonVechi.denumireMarfa;
-
-    return *this;
-}
+Vagon &Vagon::operator=(const Vagon &vagonVechi) = default;
 
 // operator pentru afisare
 ostream &operator<<(ostream &out, const Vagon &myVagon) {

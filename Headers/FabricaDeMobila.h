@@ -17,7 +17,11 @@ public:
     // Definire functie virtuala
     void produce() override;
 
+    // Suprascriere operator =
+    FabricaDeMobila &operator=(const FabricaDeMobila &fabricaDeMobila);
 
+    // Suprascriere copy constructor
+    [[maybe_unused]] FabricaDeMobila(const FabricaDeMobila &fabricaDeMobila);
 };
 
 #endif //OOP_FABRICADEMOBILA_H

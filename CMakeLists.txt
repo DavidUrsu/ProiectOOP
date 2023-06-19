@@ -22,7 +22,9 @@ set(debug_mode "$<OR:${is_debug},${is_rel_with_deb}>")
 
 function(set_custom_stdlib_and_sanitizers target add_apple_asan)
     if(MSVC)
-        target_compile_options(${target} PRIVATE "$<${debug_mode}:/fsanitize=address>")
+        # see https://gitlab.kitware.com/cmake/cmake/-/issues/24922
+        set_target_properties(${target} PROPERTIES VS_USER_PROPS "${CMAKE_SOURCE_DIR}/disable_modules.props")
+        target_compile_options(${target} PRIVATE "$<${debug_mode}:/fsanitize=address>" /experimental:module-)
         return()
     endif()
 
@@ -80,7 +82,7 @@ endfunction()
 ###############################################################################
 
 # NOTE: update executable name in .github/workflows/cmake.yml:25 when changing name here
-add_executable(${PROJECT_NAME} main.cpp Sources/CaleFerata.cpp Headers/CaleFerata.h Sources/Fabrica.cpp Headers/Fabrica.h Sources/Vagon.cpp Headers/Vagon.h Sources/Tren.cpp Headers/Tren.h Sources/Firma.cpp Headers/Firma.h Sources/Harta.cpp Headers/Harta.h Sources/FabricaDeMobila.cpp Headers/FabricaDeMobila.h Sources/Lumbermill.cpp Headers/Lumbermill.h Sources/Exceptie.cpp Headers/Exceptie.h)
+add_executable(${PROJECT_NAME} main.cpp Sources/CaleFerata.cpp Headers/CaleFerata.h Sources/Fabrica.cpp Headers/Fabrica.h Sources/Vagon.cpp Headers/Vagon.h Sources/Tren.cpp Headers/Tren.h Sources/Firma.cpp Headers/Firma.h Sources/Harta.cpp Headers/Harta.h Sources/FabricaDeMobila.cpp Headers/FabricaDeMobila.h Sources/Lumbermill.cpp Headers/Lumbermill.h Sources/ExceptieJoc.cpp Headers/ExceptieJoc.h Sources/utility.cpp)
 
 ###############################################################################
 

@@ -31,6 +31,12 @@ public:
 
     // operator pentru afisare
     friend ostream &operator<<(ostream &out, const CaleFerata &myCaleFerata);
+
+    // suprascriere operator =
+    CaleFerata& operator=(const CaleFerata& myCaleFerata) = default;
+
+    // suprascriere copy constructor
+    CaleFerata(const CaleFerata& myCaleFerata);
 };
 
 

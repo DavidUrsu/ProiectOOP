@@ -6,8 +6,18 @@
 #include "iostream"
 
 // Constructor firma
-Firma::Firma(string denumire_) : denumire{std::move(denumire_)}, money{15000} {
+[[maybe_unused]] Firma::Firma(string denumire_) : denumire{std::move(denumire_)}, money{15000} {
     string log = "A fost creata firma " + denumire + '\n';
+    cout << log;
+}
+
+// Deconstructor firma
+Firma::~Firma() {
+    //distrugere trenuri
+    for (auto i : flota)
+        delete (i);
+
+    string log = "A fost distrusa firma " + denumire + '\n';
     cout << log;
 }
 
@@ -45,4 +55,24 @@ void Firma::buyWithMoney(int sumaDebitata) {
 // Functie pentru adaugare de bani in cont-ul firmei
 void Firma::addMoney(int sumaCastigata) {
     money = money + sumaCastigata;
+}
+
+Firma &Firma::operator=(const Firma &firma) {
+    if (this != &firma) {
+        denumire = firma.denumire;
+        // fac un nou vector de trenuri si creez un nou tren cu aceleasi caracteristici ca trenul din firma
+        for(auto i: firma.flota)
+            flota.push_back(new Tren(i->getModel(), i->getPutereDeTractiune()));
+        money = firma.money;
+    }
+    return *this;
+}
+
+[[maybe_unused]] Firma::Firma(const Firma &firma) {
+    denumire = firma.denumire;
+    // fac un nou vector de trenuri si creez un nou tren cu aceleasi caracteristici ca trenul din firma
+    for(auto i: firma.flota)
+        flota.push_back(new Tren(i->getModel(), i->getPutereDeTractiune()));
+    money = firma.money;
+
 }

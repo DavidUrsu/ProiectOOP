@@ -14,6 +14,12 @@ public:
     explicit Lumbermill(string materialProdus_ = "nedefinit", string materialCerut_ = "nedefinit",
                         string denumire_ = "nedefinit");
     void produce() override;
+
+    // Suprascriere operator =
+    Lumbermill &operator=(const Lumbermill &lumbermill);
+
+    // Suprascriere copy constructor
+    [[maybe_unused]] [[maybe_unused]] Lumbermill(const Lumbermill &lumbermill);
 };
 
 

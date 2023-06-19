@@ -16,9 +16,8 @@ Tren::Tren(string model_, int putereDeTractiune_) : model{std::move(model_)}, pu
 // Deconstructor tren
 Tren::~Tren() {
     cout << "S-a vandut locomotiva " << model << endl;
-    for(auto i : incarcatura){
+    for(auto i : incarcatura)
         delete(i);
-    }
 }
 
 // Functie prin care se adauga in vectorul de incarcatura, adrese ale vagoanelor noi create
@@ -79,4 +78,34 @@ ostream &operator<<(ostream &out, const Tren &myTren) {
     out << myTren.model << " | Putere de tractiune: " << myTren.putereDeTractiune << " | Vagoane conectate: "
         << myTren.incarcatura.size();
     return out;
+}
+
+int Tren::getPutereDeTractiune() const {
+    return putereDeTractiune;
+}
+
+string Tren::getModel() const {
+    return model;
+}
+
+Tren &Tren::operator=(const Tren &tren) {
+    if (this != &tren) {
+        model = tren.model;
+        putereDeTractiune = tren.putereDeTractiune;
+        //pentru fiecare vagon se creaaza o noua instanta cu aceleasi caracteristici
+        for (auto i : tren.incarcatura) {
+            incarcatura.push_back(new Vagon(*i));
+        }
+    }
+    return *this;
+}
+
+Tren::Tren(const Tren &tren) {
+    model = tren.model;
+    putereDeTractiune = tren.putereDeTractiune;
+    //pentru fiecare vagon se creaaza o noua instanta cu aceleasi caracteristici
+    for (auto i : tren.incarcatura) {
+        incarcatura.push_back(new Vagon(*i));
+    }
+
 }

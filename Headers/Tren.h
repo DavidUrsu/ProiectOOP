@@ -35,6 +35,18 @@ public:
 
     // operator pentru afisare
     friend ostream &operator<<(ostream &out, const Tren &myTren);
+
+    // Getter pentru puterea de tractiune
+    [[nodiscard]] int getPutereDeTractiune() const;
+
+    // Getter pentru model
+    [[nodiscard]] string getModel() const;
+
+    // Suprascriere operator =
+    Tren& operator=(const Tren& tren);
+
+    // Suprascriere copy constructor
+    Tren(const Tren& tren);
 };
 
 

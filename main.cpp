@@ -8,30 +8,11 @@
 #include "Headers/Tren.h"
 #include "Headers/FabricaDeMobila.h"
 #include "Headers/Lumbermill.h"
-#include "Headers/Exceptie.h"
+#include "Headers/ExceptieJoc.h"
 
 #include<string>
 
 using namespace std;
-
-bool isNumber(const std::string& str) {
-    int ok = true;
-    // Check if the string is empty
-    if (str.empty()) {
-        ok = false;
-    }
-
-    // Check each character of the string
-    for (char c : str) {
-        // Check if the character is a digit
-        if (!std::isdigit(c)) {
-            ok = false;
-        }
-    }
-
-    // All characters are digits, so it's a number
-    return ok;
-}
 
 void afisareLogo() {
     cout << R"( _______        _         __  __             _       )" << endl;
@@ -137,13 +118,17 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
 
             int selectLocomotiva;
             // Se verifica input-ul
-            try {
-                if (isNumber(selectLocomotivaString) && stoi(selectLocomotivaString) < int(flota.size() + 1)) {
-                    selectLocomotiva = stoi(selectLocomotivaString);
-                } else {
-                    throw Exceptie("Locomotiva introdusa nu face parte din flota!");
-                }
-            } catch (Exceptie& error){
+            try{
+                // se incearca sa se foloseasca functia stoi, iar in cazul intrarii unui string se arunca o exceptie
+                selectLocomotiva = stoi(selectLocomotivaString);
+                // Se verifica daca indicele este valid
+                if(selectLocomotiva < 1 || selectLocomotiva > int(flota.size()))
+                    throw ExceptieLocomotiva();
+            } catch (invalid_argument& error){
+                cout << "Valoarea introdusa nu este un numar!" << endl;
+                afisareComenzi();
+                continue;
+            } catch(ExceptieLocomotiva& error){
                 cout << error.what() << endl;
                 afisareComenzi();
                 continue;
@@ -165,13 +150,9 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                     int aux;
 
                     try {
-                        if (isNumber(auxString)){
-                            aux = stoi(auxString);
-                        } else {
-                            throw Exceptie("Valoarea introdusa nu este un numar!");
-                        }
-                    } catch (Exceptie& error){
-                        cout << error.what() << endl;
+                        aux = stoi(auxString);
+                    } catch (invalid_argument& error){
+                        cout << "Valoarea introdusa nu este un numar!" << endl;
                         break;
                     }
 
@@ -188,13 +169,9 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                     int aux;
 
                     try {
-                        if (isNumber(auxString)){
-                            aux = stoi(auxString);
-                        } else {
-                            throw Exceptie("Valoarea introdusa nu este un numar!");
-                        }
-                    } catch (Exceptie& error){
-                        cout << error.what() << endl;
+                        aux = stoi(auxString);
+                    } catch (invalid_argument& error){
+                        cout << "Valoarea introdusa nu este un numar!" << endl;
                         break;
                     }
 
@@ -229,16 +206,18 @@ int main() {
     Firma myCompany("Deivid Transportation");
     Harta hartaJoc;
 
-    Tren tren1("Phoenix", 15);
-    myCompany.adaugareLocomotiva(&tren1);
-    Tren tren2("Poseidon", 20);
-    myCompany.adaugareLocomotiva(&tren2);
+    //adaugare locomotive
+    Tren *tren1 = new Tren("Phoenix", 15);
+    myCompany.adaugareLocomotiva(tren1);
 
-    Lumbermill LumbermillHarta("Lemn", "-", "Lumbermill");
-    auto *pointerLumbermill = dynamic_cast<Fabrica*>(&LumbermillHarta);
+    Tren *tren2 = new Tren("Poseidon", 20);
+    myCompany.adaugareLocomotiva(tren2);
 
-    FabricaDeMobila IKEA("Mobila", "Lemn", "IKEA", 100);
-    auto *pointerIKEA = dynamic_cast<Fabrica*>(&IKEA);
+    //pointer la fabrica de lemn
+    Fabrica *pointerLumbermill = new Lumbermill("Lemn", "-", "Lumbermill");
+
+    //pointer la fabrica de mobila
+    Fabrica *pointerIKEA = new FabricaDeMobila("Mobila", "Lemn", "IKEA", 100);
 
     while (pointerIKEA->getX() == pointerLumbermill->getX() || pointerIKEA->getY() == pointerLumbermill->getY()) {
         pointerIKEA->regenerareCoordonate();
@@ -246,9 +225,11 @@ int main() {
 
     hartaJoc.actualizareHarta(pointerIKEA);
     hartaJoc.actualizareHarta(pointerLumbermill);
+    //Obiectele se distrug in deconstructorul hartaJoc
 
     updateInterfata(&myCompany, &hartaJoc);
     asteptareInput(&myCompany, &hartaJoc);
+
 
     return 0;
 }
