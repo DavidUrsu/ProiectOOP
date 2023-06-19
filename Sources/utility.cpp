@@ -1,7 +1,6 @@
 //
 // Created by David on 6/19/2023.
 //
-#pragma once
 #include<iostream>
 #include<random>
 
