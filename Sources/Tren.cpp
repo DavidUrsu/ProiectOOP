@@ -100,9 +100,7 @@ Tren &Tren::operator=(const Tren &tren) {
     return *this;
 }
 
-Tren::Tren(const Tren &tren) {
-    model = tren.model;
-    putereDeTractiune = tren.putereDeTractiune;
+Tren::Tren(const Tren &tren) : model{tren.model}, putereDeTractiune{tren.putereDeTractiune} {
     //pentru fiecare vagon se creaaza o noua instanta cu aceleasi caracteristici
     for (auto i : tren.incarcatura) {
         incarcatura.push_back(new Vagon(*i));

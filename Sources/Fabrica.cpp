@@ -94,16 +94,7 @@ Fabrica &Fabrica::operator=(const Fabrica &myFabrica) {
     return *this;
 }
 
-Fabrica::Fabrica(const Fabrica &myFabrica) {
-    materialProdus = myFabrica.materialProdus;
-    materialCerut = myFabrica.materialCerut;
-    denumire = myFabrica.denumire;
-    coordonateX = myFabrica.coordonateX;
-    coordonateY = myFabrica.coordonateY;
-    stocMaterialNecesar = myFabrica.stocMaterialNecesar;
-    stocProdusFinal = myFabrica.stocProdusFinal;
-    simbolHarta = myFabrica.simbolHarta;
-}
+Fabrica::Fabrica(const Fabrica &myFabrica) = default;
 
 void Fabrica::setMaterialProdus(string newVal) {
     materialProdus = std::move(newVal);

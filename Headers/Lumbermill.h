@@ -19,7 +19,7 @@ public:
     Lumbermill &operator=(const Lumbermill &lumbermill);
 
     // Suprascriere copy constructor
-    [[maybe_unused]] [[maybe_unused]] Lumbermill(const Lumbermill &lumbermill);
+    [[maybe_unused]] [[maybe_unused]] [[maybe_unused]] Lumbermill(const Lumbermill &lumbermill);
 };
 
 

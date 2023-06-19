@@ -39,12 +39,7 @@ FabricaDeMobila &FabricaDeMobila::operator=(const FabricaDeMobila &fabricaDeMobi
     return *this;
 }
 
-[[maybe_unused]] FabricaDeMobila::FabricaDeMobila(const FabricaDeMobila &fabricaDeMobila) {
-    this->setDenumire(fabricaDeMobila.getDenumire());
-    this->setMaterialCerut(fabricaDeMobila.getMaterialCerut());
-    this->setMaterialProdus(fabricaDeMobila.getMaterialOferit());
-    this->setStocMaterialNecesar(fabricaDeMobila.getStocMaterialNecesar());
-    this->setStocProdusFinal(fabricaDeMobila.getStocProdusFinal());
-    this->setCoordonateX(fabricaDeMobila.getX());
-    this->setCoordonateY(fabricaDeMobila.getY());
+// Constructor de copiere
+FabricaDeMobila::FabricaDeMobila(const FabricaDeMobila &fabricaDeMobila) : Fabrica(fabricaDeMobila) {
+    cout << "Constructor de copiere FabricaDeMobila" << endl;
 }

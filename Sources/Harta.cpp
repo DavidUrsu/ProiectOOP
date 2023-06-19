@@ -163,16 +163,16 @@ Harta &Harta::operator=(const Harta &myHarta) {
     return *this;
 }
 
-[[maybe_unused]] Harta::Harta(const Harta &myHarta) {
-    vectorHarta = myHarta.vectorHarta;
+[[maybe_unused]] Harta::Harta(const Harta &myHarta) : vectorHarta(myHarta.vectorHarta) {
     // pentru fiecare fabrica se creeaza o noua fabrica cu aceleasi caracteristici
     for (auto &i: myHarta.listaFabrici) {
         //verificare tip fabrica cu dynamic_cast
         if (dynamic_cast<FabricaDeMobila *>(i))
-            listaFabrici.push_back(new FabricaDeMobila(i->getMaterialOferit(), i->getMaterialCerut(), i->getDenumire(), i->getStocMaterialNecesar()));
+            listaFabrici.push_back(new FabricaDeMobila(*dynamic_cast<FabricaDeMobila *>(i)));
 
+        // copiere folosind dynamic_cast si constructor de copiere
         if (dynamic_cast<Lumbermill *>(i))
-            listaFabrici.push_back(new Lumbermill(i->getMaterialOferit(), i->getMaterialCerut(), i->getDenumire()));
+            listaFabrici.push_back(new Lumbermill(*dynamic_cast<Lumbermill *>(i)));
     }
 
     // pentru fiecare cale ferata se creeaza o noua cale ferata cu aceleasi caracteristici

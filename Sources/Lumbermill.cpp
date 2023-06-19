@@ -30,13 +30,7 @@ Lumbermill &Lumbermill::operator=(const Lumbermill &lumbermill) {
     return *this;
 }
 
-[[maybe_unused]] Lumbermill::Lumbermill(const Lumbermill &lumbermill) {
-    this->setDenumire(lumbermill.getDenumire());
-    this->setMaterialCerut(lumbermill.getMaterialCerut());
-    this->setMaterialProdus(lumbermill.getMaterialOferit());
-    this->setStocMaterialNecesar(lumbermill.getStocMaterialNecesar());
-    this->setStocProdusFinal(lumbermill.getStocProdusFinal());
-    this->setCoordonateX(lumbermill.getX());
-    this->setCoordonateY(lumbermill.getY());
-
+// Constructor de copiere
+[[maybe_unused]] Lumbermill::Lumbermill(const Lumbermill &lumbermill) : Fabrica(lumbermill) {
+    cout << "Constructor de copiere Lumbermill" << endl;
 }

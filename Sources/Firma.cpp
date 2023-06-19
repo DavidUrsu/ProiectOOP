@@ -68,11 +68,8 @@ Firma &Firma::operator=(const Firma &firma) {
     return *this;
 }
 
-[[maybe_unused]] Firma::Firma(const Firma &firma) {
-    denumire = firma.denumire;
+[[maybe_unused]] Firma::Firma(const Firma &firma) : denumire{firma.denumire}, money{firma.money} {
     // fac un nou vector de trenuri si creez un nou tren cu aceleasi caracteristici ca trenul din firma
     for(auto i: firma.flota)
         flota.push_back(new Tren(i->getModel(), i->getPutereDeTractiune()));
-    money = firma.money;
-
 }
