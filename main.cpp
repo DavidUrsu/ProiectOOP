@@ -124,12 +124,12 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                 // Se verifica daca indicele este valid
                 if(selectLocomotiva < 1 || selectLocomotiva > int(flota.size()))
                     throw ExceptieLocomotiva();
-            } catch (invalid_argument& error){
-                cout << "Valoarea introdusa nu este un numar!" << endl;
-                afisareComenzi();
-                continue;
             } catch(ExceptieLocomotiva& error){
                 cout << error.what() << endl;
+                afisareComenzi();
+                continue;
+            } catch (...){
+                cout << "Valoarea introdusa nu este un numar!" << endl;
                 afisareComenzi();
                 continue;
             }
@@ -151,7 +151,7 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
 
                     try {
                         aux = stoi(auxString);
-                    } catch (invalid_argument& error){
+                    } catch (...){
                         cout << "Valoarea introdusa nu este un numar!" << endl;
                         break;
                     }
@@ -170,7 +170,7 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
 
                     try {
                         aux = stoi(auxString);
-                    } catch (invalid_argument& error){
+                    } catch (...){
                         cout << "Valoarea introdusa nu este un numar!" << endl;
                         break;
                     }
