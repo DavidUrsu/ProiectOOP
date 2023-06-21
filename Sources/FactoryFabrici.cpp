@@ -5,9 +5,7 @@
 #include "../Headers/FactoryFabrici.h"
 #include "utility.cpp"
 
-FactoryFabrici::FactoryFabrici() {
-    orase = {"Bucuresti", "Cluj", "Timisoara", "Iasi", "Constanta", "Brasov", "Galati", "Ploiesti", "Oradea", "Braila"};
-}
+FactoryFabrici::FactoryFabrici() : orase({"Bucuresti", "Cluj", "Timisoara", "Iasi", "Constanta", "Brasov", "Galati", "Ploiesti", "Oradea", "Braila"}) {}
 
 Fabrica *FactoryFabrici::createFabricaDeCherestea() {
     return new FabricaMaterialPrim("Lemn", "-", "Fabrica de cherestea " + orase[my_rand(9)]);

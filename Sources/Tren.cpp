@@ -42,7 +42,7 @@ void Tren::cuplareVagone(int const numarVagoane, Firma *myCompany, int const ind
         // adaug referintele vagoanelor in vectorul incarcatura
         for (int i = 0; i < numarVagoane; i++) {
             if (tipVagon == 1)
-                incarcaturaFloat.push_back(new Vagon<float>(5252.123, "Lichide"));
+                incarcaturaFloat.push_back(new Vagon<float>(5252.6, "Lichide"));
             else if (tipVagon == 2)
                 incarcaturaInt.push_back(new Vagon<int>(73, "Calatori"));
             else if (tipVagon == 3)

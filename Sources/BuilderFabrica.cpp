@@ -7,9 +7,7 @@
 #include "../Headers/BuilderFabrica.h"
 #include "utility.cpp"
 
-BuilderFabrica::BuilderFabrica() : materialProdus("nedefinit"), materialCerut("-"), denumire("nedefinit"), stocMaterialNecesar(0) {
-    orase = {"Bucuresti", "Cluj", "Timisoara", "Iasi", "Constanta", "Brasov", "Galati", "Ploiesti", "Oradea", "Braila"};
-}
+BuilderFabrica::BuilderFabrica() : materialProdus("nedefinit"), materialCerut("-"), denumire("nedefinit"), stocMaterialNecesar(0), orase({"Bucuresti", "Cluj", "Timisoara", "Iasi", "Constanta", "Brasov", "Galati", "Ploiesti", "Oradea", "Braila"}) {}
 
 BuilderFabrica *BuilderFabrica::setMaterialProdus(string materialProdus_) {
     materialProdus = std::move(materialProdus_);
