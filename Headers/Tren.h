@@ -17,8 +17,9 @@ class Tren {
     string model;
     // Puterea de tractiune se refera la numarul maxim de vagoane pe care un tren il poate transporta
     int putereDeTractiune;
-    // In vectorul incarcatura, se vor retine toate adresele vagoanelor trenului
-    vector<Vagon *> incarcatura;
+    // In vectorii incarcatura, se vor retine toate adresele vagoanelor trenului
+    vector<Vagon<int>*> incarcaturaInt;
+    vector<Vagon<float>*> incarcaturaFloat;
 
 public:
     // Constructor Tren
@@ -28,10 +29,13 @@ public:
     ~Tren();
 
     // Functie prin care se adauga in vectorul "incarcatura", adresele vagoanelor noi create
-    void cuplareVagone(int numarVagoane, Firma *myCompany, int indexTren);
+    void cuplareVagone(int numarVagoane, Firma *myCompany, int indexTren, int tipVagon);
 
     // Functie prin care se realizeaza stergerea obiectelor "vagon" si scoaterea adreselor din vectorul "incarcatura"
     void decuplareVagone(int numarVagoane, Firma *myCompany, int indexTren);
+
+    // Functie prin care se afiseaza detaliile vaganelor conectate la tren
+    void afisareDetaliiVagoane();
 
     // operator pentru afisare
     friend ostream &operator<<(ostream &out, const Tren &myTren);

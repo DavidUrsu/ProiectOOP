@@ -38,10 +38,19 @@ public:
 
     // Actualizez simbolul unei entitati pe harta si adaug entitatea in vectorul ei specific
     // Suprascriere functie
-    void actualizareHarta(Fabrica *myFabrica);
+    [[maybe_unused]] void actualizareHarta(Fabrica *myFabrica);
 
     // Suprascriere functie
-    void actualizareHarta(CaleFerata *myCaleFerata);
+    [[maybe_unused]] void actualizareHarta(CaleFerata *myCaleFerata);
+
+    // Functie template prin care se plaseaza semnul unui obiect pe harta
+    template<typename T> T adaugareSimbolHarta(T x);
+
+    // Verificare daca toate fabricile sunt pe axe diferite ale vectorului vectorHarta
+    bool verificarePozitiiFabrici();
+
+    // Functie prin care se regenereaza coordonatele fabricilor
+    void regenerareCoordonateFabrici();
 
     // Functie prin care se afiseaza lista tuturor fabricilor de pe harta
     void afisareListaFabrici();

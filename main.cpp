@@ -1,14 +1,12 @@
 #include "Headers/rlutil/rlutil.h"
 
-//g++ main.cpp Sources/CaleFerata.cpp Sources/Fabrica.cpp Sources/Firma.cpp Sources/Harta.cpp Sources/Tren.cpp Sources/Vagon.cpp -o main.exe
-
 //Clase
 #include "Headers/Harta.h"
 #include "Headers/Firma.h"
 #include "Headers/Tren.h"
-#include "Headers/FabricaDeMobila.h"
-#include "Headers/Lumbermill.h"
 #include "Headers/ExceptieJoc.h"
+#include "Headers/FactoryFabrici.h"
+#include "Headers/BuilderFabrica.h"
 
 #include<string>
 
@@ -38,6 +36,7 @@ void afisareComenzi(){
     cout << "U - Update harta si stergere log-uri" << endl;
     cout << "C - Construieste o cale fereta intre doua fabrici" << endl;
     cout << "L - Modifica vagoanele unei locomotive" << endl;
+    cout << "K - Vizualizare configuratie locomotiva" << endl;
 }
 
 void updateInterfata(Firma *myCompany, Harta *hartaJoc, int codAfisare = 0) {
@@ -88,10 +87,18 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
         if (key == 'c') {
             // Se citeste numele fabricilor intre care se construieste drumul
             string fabrica1, fabrica2;
+            char fabrica1aux[200], fabrica2aux[200];
             cout << "Prima fabrica: ";
-            cin >> fabrica1;
+            //citeste tot input-ul pana la enter
+            cin.get(fabrica1aux, 200);
+            cin.ignore();
+            fabrica1 = fabrica1aux;
+
+            //citeste tot input-ul pana la enter
             cout << "A doua fabrica: ";
-            cin >> fabrica2;
+            cin.get(fabrica2aux, 200);
+            cin.ignore();
+            fabrica2 = fabrica2aux;
             // Se construieste calea ferata si se verifica daca s-a efectuat cu succes
             if(hartaJoc->construireCaleFerata(fabrica1, fabrica2) == 0)
                 // In cazul in care s-a reusit constructia, se face refresh la interfata
@@ -156,8 +163,18 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                         break;
                     }
 
+                    delimitareSectiune("Tipul de vagoane");
+                    cout << "1 - Vagoane de lichide (petrol)" << endl;
+                    cout << "2 - Vagoane de calatori" << endl;
+                    cout << "3 - Vagoane de marfa (jucarii, mobila)" << endl;
+                    cout << "4 - Vagoane de lemne " << endl;
+                    while(true) {
+                        key = rlutil::getkey(); // apel blocant; apelează kbhit și getch
+                        if(key == '1' || key == '2' || key == '3' || key == '4')
+                            break;
+                    }
                     delimitareSectiune("Logs");
-                    flota[selectLocomotiva - 1]->cuplareVagone(aux, myCompany, selectLocomotiva - 1);
+                    flota[selectLocomotiva - 1]->cuplareVagone(aux, myCompany, selectLocomotiva - 1, int(key) - int('0'));
                     break;
                 }
                 if (key == 'v') {
@@ -180,6 +197,43 @@ int asteptareInput(Firma *myCompany, Harta *hartaJoc) {
                     break;
                 }
             }
+            afisareComenzi();
+            delimitareSectiune("Logs");
+        }
+        if (key == 'k'){
+            // Refresh interfata, ramane doar harta si lista de fabrici
+            updateInterfata(myCompany, hartaJoc, 1);
+
+            // Se obtine vectorul ce contine adresele tuturor locomotivelor
+            vector<Tren *> flota = myCompany->getFlota();
+            // Se afiseaza detaliile tuturor locomotivelor
+            for (unsigned int i = 0; i < flota.size(); i++)
+                cout << i + 1 << ". " << *flota[i] << endl;
+
+            cout << "Introdu indicele locomotivei pe care doresti sa o vizualizezi: ";
+            string selectLocomotivaString;
+            cin >> selectLocomotivaString;
+
+            int selectLocomotiva;
+            // Se verifica input-ul
+            try{
+                // se incearca sa se foloseasca functia stoi, iar in cazul intrarii unui string se arunca o exceptie
+                selectLocomotiva = stoi(selectLocomotivaString);
+                // Se verifica daca indicele este valid
+                if(selectLocomotiva < 1 || selectLocomotiva > int(flota.size()))
+                    throw ExceptieLocomotiva();
+            } catch(ExceptieLocomotiva& error){
+                cout << error.what() << endl;
+                afisareComenzi();
+                continue;
+            } catch (...){
+                cout << "Valoarea introdusa nu este un numar!" << endl;
+                afisareComenzi();
+                continue;
+            }
+
+            flota[selectLocomotiva - 1]->afisareDetaliiVagoane();
+
             afisareComenzi();
             delimitareSectiune("Logs");
         }
@@ -213,23 +267,37 @@ int main() {
     Tren *tren2 = new Tren("Poseidon", 20);
     myCompany.adaugareLocomotiva(tren2);
 
-    //pointer la fabrica de lemn
-    Fabrica *pointerLumbermill = new Lumbermill("Lemn", "-", "Lumbermill");
+    auto *FF = new FactoryFabrici();
 
-    //pointer la fabrica de mobila
-    Fabrica *pointerIKEA = new FabricaDeMobila("Mobila", "Lemn", "IKEA", 100);
+    //pointer creare si adaugare fabrica de cherestea
+    hartaJoc.actualizareHarta(FF->createFabricaDeCherestea());
+    hartaJoc.actualizareHarta(FF->createFabricaDeCherestea());
 
-    while (pointerIKEA->getX() == pointerLumbermill->getX() || pointerIKEA->getY() == pointerLumbermill->getY()) {
-        pointerIKEA->regenerareCoordonate();
+    //creare fabrica de mobila
+    hartaJoc.actualizareHarta(FF->createFabricaDeMobila());
+
+
+    auto *BF = new BuilderFabrica();
+    //creare fabrica de jucarii prin builder
+    hartaJoc.actualizareHarta(BF->setDenumire("Fabrica de jucarii")->setMaterialProdus("Jucarii")->setMaterialCerut("Plastic")->setStocMaterialNecesar(200)->build());
+    //creare fabrica de plastic prin builder
+    hartaJoc.actualizareHarta(BF->setDenumire("Fabrica de plastic")->setMaterialProdus("Plastic")->setMaterialCerut("Petrol")->setStocMaterialNecesar(200)->build());
+    //creare fabrica de petrol prin builder
+    hartaJoc.actualizareHarta(BF->setDenumire("Fabrica de petrol")->setMaterialProdus("Petrol")->build());
+
+    //se verifica daca pozițiile fabricilor sunt unice
+    while(!hartaJoc.verificarePozitiiFabrici()){
+        hartaJoc.regenerareCoordonateFabrici();
     }
-
-    hartaJoc.actualizareHarta(pointerIKEA);
-    hartaJoc.actualizareHarta(pointerLumbermill);
-    //Obiectele se distrug in deconstructorul hartaJoc
 
     updateInterfata(&myCompany, &hartaJoc);
     asteptareInput(&myCompany, &hartaJoc);
 
+    delete FF;
+    delete BF;
 
     return 0;
 }
+
+// o functie sablon: functia de afisare a hartii
+// o clasa sablon: clasa de vagoane

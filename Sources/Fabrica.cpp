@@ -15,7 +15,9 @@
     coordonateX{my_rand(99)},
     coordonateY{my_rand(19)},
     stocMaterialNecesar{stocMaterialNecesar_},
-    stocProdusFinal{0} {}
+    stocProdusFinal{0} {
+    cout << "S-a creat fabrica " << denumire << " la coordonatele " << coordonateX << " " << coordonateY << endl;
+}
 
 // Deconstructor al fabricii
 Fabrica::~Fabrica() {

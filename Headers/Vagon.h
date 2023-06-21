@@ -10,27 +10,38 @@
 
 using namespace std;
 
+template <class T>
 class Vagon {
-    // capacitatea maxima reprezinta tonajul maxim de marfa pe care un vagon il poate transporta
-    int capacitateMaxima;
-    string denumireMarfa;
-    // momentan nu au nicio utilizare variabilele
+    // capacitatea maxima reprezinta numarul de unitati internationale de marfa pe care le poate transporta un vagon
+    T capacitateMaxima;
 
+    string denumireMarfa;
 public:
     // Constructor vagon
-    explicit Vagon();
+    explicit Vagon(T capacitateMaxima_, string  denumireMarfa_) : capacitateMaxima(capacitateMaxima_), denumireMarfa(std::move(denumireMarfa_)) {
+        string log = "Vagon de " + denumireMarfa + " creat\n";
+        cout << log;
+    }
 
-    // Constructor de copiere vagon
-    Vagon(const Vagon &vagonVechi);
+    T getCantitateMarfaMaxima() const{
+        return capacitateMaxima;
+    }
+
+    [[nodiscard]] string getDenumireMarfa() const{
+        return denumireMarfa;
+    }
 
     // Deconstructor vagon
-    ~Vagon();
-
-    // Operator de copiere
-    Vagon &operator=(const Vagon &vagonVechi);
+    ~Vagon(){
+        string log = "Vagon distrus\n";
+        cout << log;
+    };
 
     // operator pentru afisare
-    friend ostream &operator<<(ostream &out, const Vagon &myVagon);
+    friend ostream& operator<<(ostream& os, const Vagon& vagon) {
+        os << "Vagon cu capacitatea maxima de " << vagon.capacitateMaxima << " unitati internationale de marfa si cu marfa " << vagon.denumireMarfa << endl;
+        return os;
+    }
 };
 
 

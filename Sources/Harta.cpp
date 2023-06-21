@@ -3,8 +3,8 @@
 //
 
 #include "../Headers/Harta.h"
-#include "../Headers/Lumbermill.h"
-#include "../Headers/FabricaDeMobila.h"
+#include "../Headers/FabricaMaterialPrim.h"
+#include "../Headers/FabricaPrelucrare.h"
 
 // constructor harta
 Harta::Harta() : caracterBackgrond{'.'}, vectorHarta(20, vector<char>(100, caracterBackgrond)){}
@@ -19,8 +19,8 @@ Harta::~Harta() {
 
 // Functie prin care afisez harta
 void Harta::afisareHarta() {
-    for (int i = 19; i >= 0; i--) {
-        for (int j = 0; j < 100; j++) {
+    for (int i = int(vectorHarta.size())-1; i >= 0; i--) {
+        for (int j = 0; j < int(vectorHarta[0].size()); j++) {
             cout << vectorHarta[i][j];
         }
         cout << endl;
@@ -29,17 +29,26 @@ void Harta::afisareHarta() {
 
 // Actualizez simbolul unei entitati pe harta si adaug entitatea in vectorul ei specific
 // Suprascriere functie
-void Harta::actualizareHarta(Fabrica *myFabrica) {
-    // Se adauga simbolul fabricii pe harta
-    vectorHarta[myFabrica->getY()][myFabrica->getX()] = myFabrica->getSimbol();
+[[maybe_unused]] void Harta::actualizareHarta(Fabrica *myFabrica) {
     // Se adauga fabrica in vectorul ce le tine evidenta
     listaFabrici.push_back(myFabrica);
+
+    adaugareSimbolHarta(myFabrica);
 }
 
 // Suprascriere functie
-void Harta::actualizareHarta(CaleFerata *myCaleFerata) {
-    // Se adauga simbolul caii ferate pe harta
-    vectorHarta[myCaleFerata->getY()][myCaleFerata->getX()] = myCaleFerata->getSimbol();
+[[maybe_unused]] void Harta::actualizareHarta(CaleFerata *myCaleFerata) {
+    // Se adauga calea ferata in vectorul ce le tine evidenta
+    listaCaleFerata.push_back(myCaleFerata);
+
+    adaugareSimbolHarta(myCaleFerata);
+}
+
+// Functie template prin care se plaseaza semnul unui obiect pe harta
+template<typename T> T Harta::adaugareSimbolHarta(T x){
+    // se adauga obiectul pe harta
+    vectorHarta[x->getY()][x->getX()] = x->getSimbol();
+    return x;
 }
 
 // Functie prin care se afiseaza lista tuturor fabricilor de pe harta
@@ -85,27 +94,23 @@ int Harta::construireCaleFerata(const string &fabrica1, const string &fabrica2) 
         // Se itereaza de la cel mai mic X, spre cel mai mare X
         for (int i = x1 + 1; i < x2; i++)
             // Se creaza o noua instanta pe drum la coordonatele aferente
-            listaCaleFerata.push_back(new CaleFerata(i, y1, '-')); // ═ char(205)
+            actualizareHarta(new CaleFerata(i, y1, '-')); // ═ char(205)
 
         // Se verifica in ce directie trebuie continuata calea ferata, in sus sau in jos pe axa Y
         if (y1 < y2) {
             // Se adauga coltul
-            listaCaleFerata.push_back(new CaleFerata(x2, y1, '/')); // ╝ char(188)
+            actualizareHarta(new CaleFerata(x2, y1, '/')); // ╝ char(188)
             for (int j = y1 + 1; j < y2; j++)
                 // Se creaza o noua instanta pe drum la coordonatele aferente
-                listaCaleFerata.push_back(new CaleFerata(x2, j, '|')); // ║ char(186)
+                actualizareHarta(new CaleFerata(x2, j, '|')); // ║ char(186)
         } else {
             // Se adauga coltul
-            listaCaleFerata.push_back(new CaleFerata(x2, y1, '\\')); // ╗ char(187)
+            actualizareHarta(new CaleFerata(x2, y1, '\\')); // ╗ char(187)
             for (int j = y1 - 1; j > y2; j--)
                 // Se creaza o noua instanta pe drum la coordonatele aferente
-                listaCaleFerata.push_back(new CaleFerata(x2, j, '|')); // ║ char(186)
+                actualizareHarta(new CaleFerata(x2, j, '|')); // ║ char(186)
         }
 
-        // Se adauga pe harta simbolul cailor ferate
-        for (CaleFerata *i: listaCaleFerata) {
-            actualizareHarta(i);
-        }
         return 0;
     } else {
         // Daca o fabrica nu exista, se verifica care nu exista
@@ -132,13 +137,13 @@ ostream &operator<<(ostream &out, const Harta &myHarta) {
 // Functie periodica ce initiaza functia de producere a fabricilor
 void Harta::produceFabrici() {
     for(Fabrica *i : listaFabrici){
-        //folosire dynamic_cast pentru a verifica daca obiectul este fabricaDeMobila sau Lumbermill, apoi apeleaza functia de producere virtuala specifica fiecarei clase
+        //folosire dynamic_cast pentru a verifica daca obiectul este FabricaPrelucrare sau FabricaMaterialPrim, apoi apeleaza functia de producere virtuala specifica fiecarei clase
 
-        if(dynamic_cast<FabricaDeMobila*>(i))
-            dynamic_cast<FabricaDeMobila*>(i)->produce();
+        if(dynamic_cast<FabricaPrelucrare*>(i))
+            dynamic_cast<FabricaPrelucrare*>(i)->produce();
 
-        if(dynamic_cast<Lumbermill*>(i))
-            dynamic_cast<Lumbermill*>(i)->produce();
+        if(dynamic_cast<FabricaMaterialPrim*>(i))
+            dynamic_cast<FabricaMaterialPrim*>(i)->produce();
     }
 }
 
@@ -148,16 +153,16 @@ Harta &Harta::operator=(const Harta &myHarta) {
         // pentru fiecare fabrica se creeaza o noua fabrica cu aceleasi caracteristici
         for (auto &i: myHarta.listaFabrici) {
             //verificare tip fabrica cu dynamic_cast
-            if (dynamic_cast<FabricaDeMobila *>(i))
-                listaFabrici.push_back(new FabricaDeMobila(i->getMaterialOferit(), i->getMaterialCerut(), i->getDenumire(), i->getStocMaterialNecesar()));
+            if (dynamic_cast<FabricaPrelucrare *>(i))
+                actualizareHarta(new FabricaPrelucrare(*dynamic_cast<FabricaPrelucrare *>(i)));
 
-            if (dynamic_cast<Lumbermill *>(i))
-                listaFabrici.push_back(new Lumbermill(i->getMaterialOferit(), i->getMaterialCerut(), i->getDenumire()));
+            if (dynamic_cast<FabricaMaterialPrim *>(i))
+                actualizareHarta(new FabricaMaterialPrim(*dynamic_cast<FabricaMaterialPrim *>(i)));
         }
 
         // pentru fiecare cale ferata se creeaza o noua cale ferata cu aceleasi caracteristici
         for (auto &i: myHarta.listaCaleFerata) {
-            listaCaleFerata.push_back(new CaleFerata(i->getX(), i->getY(), i->getSimbol()));
+            actualizareHarta(new CaleFerata(*i));
         }
     }
     return *this;
@@ -167,16 +172,40 @@ Harta &Harta::operator=(const Harta &myHarta) {
     // pentru fiecare fabrica se creeaza o noua fabrica cu aceleasi caracteristici
     for (auto &i: myHarta.listaFabrici) {
         //verificare tip fabrica cu dynamic_cast
-        if (dynamic_cast<FabricaDeMobila *>(i))
-            listaFabrici.push_back(new FabricaDeMobila(*dynamic_cast<FabricaDeMobila *>(i)));
+        if (dynamic_cast<FabricaPrelucrare *>(i))
+            actualizareHarta(new FabricaPrelucrare(*dynamic_cast<FabricaPrelucrare *>(i)));
 
-        // copiere folosind dynamic_cast si constructor de copiere
-        if (dynamic_cast<Lumbermill *>(i))
-            listaFabrici.push_back(new Lumbermill(*dynamic_cast<Lumbermill *>(i)));
+        if (dynamic_cast<FabricaMaterialPrim *>(i))
+            actualizareHarta(new FabricaMaterialPrim(*dynamic_cast<FabricaMaterialPrim *>(i)));
     }
 
     // pentru fiecare cale ferata se creeaza o noua cale ferata cu aceleasi caracteristici
     for (auto &i: myHarta.listaCaleFerata) {
-        listaCaleFerata.push_back(new CaleFerata(i->getX(), i->getY(), i->getSimbol()));
+        actualizareHarta(new CaleFerata(*i));
+    }
+}
+
+bool Harta::verificarePozitiiFabrici() {
+    // se itereaza prin lista de fabrici
+    for (int i = 0 ; i < int(listaFabrici.size()) - 1; i++)
+        // se verifica toate fabricile care urmeaza in vector
+        for (int j = i + 1; j < int(listaFabrici.size()); j++)
+            // se verifica daca exista fabrici cu aceleasi coordonate
+            if (listaFabrici[i]->getX() == listaFabrici[j]->getX() || listaFabrici[i]->getY() == listaFabrici[j]->getY()) {
+                cout << "Fabricile " << listaFabrici[i]->getDenumire() << " si " << listaFabrici[j]->getDenumire()
+                     << " au aceleasi coordonate pe o axa!\n";
+                return false;
+            }
+
+    return true;
+}
+
+void Harta::regenerareCoordonateFabrici() {
+    // se itereaza prin lista de fabrici
+    for (auto &i : listaFabrici) {
+        vectorHarta[i->getY()][i->getX()] = '.';
+        i->regenerareCoordonate();
+        vectorHarta[i->getY()][i->getX()] = i->getSimbol();
+        cout << "Fabrica " << i->getDenumire() << " a fost mutata pe coordonatele (" << i->getX() << ", " << i->getY() << ")\n";
     }
 }
